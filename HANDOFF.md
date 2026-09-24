@@ -17,8 +17,11 @@ maintenance. Project-local research continuity belongs in
   substantive evidence, records session logs, and halts on blockers/time limits.
 - The user's pre-existing edits in `projects/template/09_report/README.md` and
   `prompts/agents/README.md` are intentionally preserved outside this change set.
-- GitHub publication target: `hasungjun0521/Research_Agent_for_me` (new repository).
-  The previous origin is retained; publish through a separate remote. No license has been added;
+- Published public template: `https://github.com/hasungjun0521/Research_Agent_for_me`.
+  The previous origin is retained; the `publication` remote names the new repo.
+  The clean public-history checkout is `tmp/Research_Agent_for_me`; publish from
+  its `main` branch. The source maintenance branch keeps the original history.
+  No license has been added;
   an owner license choice remains pending. No live research or GPU runs were
   launched to validate scientific results.
 - Validation completed on native Windows/Python 3.11: 310 unit tests passed,
@@ -26,7 +29,9 @@ maintenance. Project-local research continuity belongs in
   complete v8.0.0 release gate passed (`--skip-paper-build --strict-template-state`).
   Actual init/plan/diagnostic CLI flow and two dependent tasks with a local fake
   agent passed. Local detailed gate log: `tmp/release_gate_full.json` (ignored).
-  GitHub-hosted Linux/Windows CI and real paid-agent scientific runs have not run.
+  GitHub CI passed all five jobs: full Linux harness verification and setup
+  on Windows/Linux with Python 3.10/3.12. Initial validation run: 35971798772.
+  Real paid-agent scientific runs have not been used as acceptance evidence.
 
 ## Current Workspace Snapshot
 

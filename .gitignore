@@ -1,0 +1,92 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Local workspace profile
+config/workspace_profile.local.json
+.claude/settings.local.json
+
+# Local PPT template (machine-local base deck, not published)
+config/ppt_template_local.pptx
+config/*.local.pptx
+
+# Private research projects
+projects/*
+!projects/template/
+!projects/template/**
+
+# Logs and temporary files
+*.log
+*.lock
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Large experiment outputs
+projects/*/03_experiments/**/results/*
+!projects/*/03_experiments/**/results/*.md
+!projects/*/03_experiments/**/results/*.yaml
+!projects/*/03_experiments/**/results/*.yml
+!projects/template/03_experiments/exp_001/results/README.md
+projects/*/08_baselines/source_snapshots/*
+!projects/*/08_baselines/source_snapshots/README.md
+projects/*/08_baselines/external_repos/
+projects/*/05_results/figures/*.png
+projects/*/05_results/figures/*.jpg
+projects/*/05_results/figures/*.jpeg
+projects/*/05_results/figures/*.pdf
+projects/*/05_results/tables/*.csv
+projects/*/05_results/tables/*.parquet
+
+# Generated weekly dev decks (scripts.commands.reports.weekly_deck output)
+projects/*/05_results/weekly_decks/
+
+# Checkpoints and model artifacts
+checkpoints/
+!projects/template/state/checkpoints/
+!projects/template/state/checkpoints/README.md
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# Raw datasets
+data/raw/
+datasets/
+*.sqlite
+*.db
+*.h5
+*.hdf5
+
+# Local Korean README (not published)
+README.ko.md
+
+# Repository-local Codex skills generated from .claude/skills by automation_setup
+.agents/skills/

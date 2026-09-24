@@ -1,0 +1,45 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "loop_id": "loop_001",
+  "status_values": [
+    "planned",
+    "running",
+    "done",
+    "blocked",
+    "waiting"
+  ],
+  "status": "planned",
+  "goal": "Clarify the first research brief and choose the next project action.",
+  "summary": "No agent pass has completed yet. Start by asking Claude or Codex to continue this project from file state.",
+  "outcome": "",
+  "started_at": "",
+  "finished_at": "",
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "completed_commands": [],
+  "results": [],
+  "next_actions": [
+    {
+      "action": "Clarify the research question, motivation, assumptions, constraints, and candidate contribution from the user's idea.",
+      "owner_agent": "motivation_planner",
+      "priority": "high",
+      "expected_outputs": [
+        "00_brief/research_question.md",
+        "00_brief/motivation.md",
+        "00_brief/problem_statement.md",
+        "00_brief/assumptions.md",
+        "00_brief/constraints.md",
+        "00_brief/contribution_candidates.md",
+        "state/current_state.md",
+        "state/agent_memory.md",
+        "state/next_actions.md",
+        "state/open_questions.md"
+      ],
+      "display_summary": "Turn the user's initial idea into a concrete research brief.",
+      "why_now": "The project needs a clear problem before it can choose literature, baselines, experiments, or writing tasks.",
+      "done_when": "The brief states the problem, motivation, assumptions, constraints, candidate contribution, and unresolved questions in reader-readable prose.",
+      "notes": "Ask Claude/Codex to execute this action and save progress to files during the pass.",
+      "created_at": "YYYY-MM-DDTHH:MM:SS+09:00"
+    }
+  ],
+  "notes": "Use file-based state, command queue, status, messages, and HANDOFF files as the default continuation workflow."
+}

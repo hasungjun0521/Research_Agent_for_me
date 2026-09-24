@@ -1,0 +1,513 @@
+repository:
+  name: research-agent-workspace
+  purpose: "File-system workspace for agent-driven research workflows."
+  version: "1.0.0"
+  default_project: projects/template
+
+metadata:
+  owner: ""
+  created: ""
+  description: "Agents communicate by reading and updating project files."
+
+agents:
+  director:
+    prompt: prompts/agents/director.md
+  motivation_planner:
+    prompt: prompts/agents/motivation_planner.md
+  literature_reviewer:
+    prompt: prompts/agents/literature_reviewer.md
+  experiment_designer:
+    prompt: prompts/agents/experiment_designer.md
+  data_analyst:
+    prompt: prompts/agents/data_analyst.md
+  code_agent:
+    prompt: prompts/agents/code_agent.md
+  result_interpreter:
+    prompt: prompts/agents/result_interpreter.md
+  writing_agent:
+    prompt: prompts/agents/writing_agent.md
+  venue_reviewer:
+    prompt: prompts/agents/venue_reviewer.md
+  critic:
+    prompt: prompts/agents/critic.md
+
+shared_prompts:
+  research_context: prompts/shared/research_context.md
+  output_contracts: prompts/shared/output_contracts.md
+  agent_status_protocol: prompts/shared/agent_status_protocol.md
+  server_experiment_rules: prompts/shared/server_experiment_rules.md
+  baseline_code_protocol: prompts/shared/baseline_code_protocol.md
+  venue_review_protocol: prompts/shared/venue_review_protocol.md
+  filesystem_safety_rules: prompts/shared/filesystem_safety_rules.md
+  skill_usage: prompts/shared/skill_usage.md
+  research_principles: prompts/shared/research_principles.md
+  style_guide: prompts/shared/style_guide.md
+  evaluation_rubric: prompts/shared/evaluation_rubric.md
+
+project_skills:
+  index: prompts/skills/README.md
+  context_budgeting: prompts/skills/context_budgeting.md
+  gpu_parallel_execution: prompts/skills/gpu_parallel_execution.md
+  experiment_smoke_first: prompts/skills/experiment_smoke_first.md
+  progress_checkpoint: prompts/skills/progress_checkpoint.md
+  state_doctor: prompts/skills/state_doctor.md
+  project_health: prompts/skills/project_health.md
+  brief_intake: prompts/skills/brief_intake.md
+  experiment_planning: prompts/skills/experiment_planning.md
+  claim_graph: prompts/skills/claim_graph.md
+  baseline_compare: prompts/skills/baseline_compare.md
+  agent_quality_audit: prompts/skills/agent_quality_audit.md
+  experiment_completion: prompts/skills/experiment_completion.md
+  fast_baseline_intake: prompts/skills/fast_baseline_intake.md
+  paper_claim_compression: prompts/skills/paper_claim_compression.md
+  performance_measurement: prompts/skills/performance_measurement.md
+  artifact_packaging: prompts/skills/artifact_packaging.md
+  project_closeout: prompts/skills/project_closeout.md
+  resource_ledger: prompts/skills/resource_ledger.md
+  phase_gate: prompts/skills/phase_gate.md
+  research_repo_import: prompts/skills/research_repo_import.md
+  workspace_profile: prompts/skills/workspace_profile.md
+
+workflows:
+  default_research_flow: workflows/default_research_flow.yaml
+  paper_iteration_flow: workflows/paper_iteration_flow.yaml
+  experiment_debug_flow: workflows/experiment_debug_flow.yaml
+
+dashboards:
+  status: parked_optional
+  release_checks: "Optional dashboard compatibility checks, including smoke, JavaScript, API, and command-runner checks, require --include-dashboard."
+  static_agent_status: dashboard/index.html
+  server_agent_status: scripts/commands/agents/agent_dashboard.py
+
+tools:
+  agent_status: scripts/commands/agents/agent_status.py
+  command_queue: scripts/commands/review/command_queue.py
+  agent_events: scripts/commands/agents/agent_events.py
+  agent_vote: scripts/commands/agents/agent_vote.py
+  session_state: scripts/commands/review/session_state.py
+  progress_checkpoint: scripts/commands/review/progress_checkpoint.py
+  state_doctor: scripts/commands/projects/state_doctor.py
+  project_health: scripts/commands/projects/project_health.py
+  brief_intake: scripts/commands/projects/brief_intake.py
+  pattern_memory: scripts/commands/review/pattern_memory.py
+  agent_quality_audit: scripts/commands/review/agent_quality_audit.py
+  ralph_loop: scripts/commands/review/ralph_loop.py
+  research_loop: scripts/commands/research/research_loop.py
+  loop_summary: scripts/commands/review/loop_summary.py
+  run_state: scripts/commands/experiments/run_state.py
+  experiment_complete: scripts/commands/experiments/experiment_complete.py
+  experiment_planner: scripts/commands/experiments/experiment_planner.py
+  gpu_scheduler: scripts/commands/experiments/gpu_scheduler.py
+  gpu_monitor: scripts/commands/experiments/gpu_monitor.py
+  result_ingest: scripts/commands/experiments/result_ingest.py
+  research_registry: scripts/commands/research/research_registry.py
+  baseline_library: scripts/commands/baselines/baseline_library.py
+  baseline_intake: scripts/commands/baselines/baseline_intake.py
+  baseline_compare: scripts/commands/baselines/baseline_compare.py
+  repo_discovery: scripts/commands/baselines/repo_discovery.py
+  baseline_sandbox: scripts/commands/baselines/baseline_sandbox.py
+  review_forms: scripts/commands/review/review_forms.py
+  create_project: scripts/commands/projects/create_project.py
+  project_intake: scripts/commands/projects/project_intake.py
+  import_research_repo: scripts/commands/projects/import_research_repo.py
+  validate_project: scripts/commands/projects/validate_project.py
+  migrate_project: scripts/commands/projects/migrate_project.py
+  project_resume: scripts/commands/projects/project_resume.py
+  project_closeout: scripts/commands/projects/project_closeout.py
+  phase_gate: scripts/commands/research/phase_gate.py
+  resource_ledger: scripts/commands/reports/resource_ledger.py
+  claim_graph: scripts/commands/reports/claim_graph.py
+  artifact_packager: scripts/commands/reports/artifact_packager.py
+
+project_paths:
+  projects_root: projects
+  template: projects/template
+  default_state_dir: state
+  brief_dir: 00_brief
+  literature_dir: 01_literature
+  planning_dir: 02_planning
+  experiments_dir: 03_experiments
+  code_dir: 04_code
+  results_dir: 05_results
+  writing_dir: 06_writing
+  reviews_dir: 07_reviews
+  baselines_dir: 08_baselines
+  report_dir: 09_report
+  review_forms_root: review_forms
+
+state_files:
+  current_state: state/current_state.md
+  project_handoff: HANDOFF.md
+  agent_memory: state/agent_memory.md
+  progress_hooks: state/progress_hooks.jsonl
+  progress_log: state/sessions/progress_log.md
+  project_health: state/project_health.md
+  state_doctor: state/state_doctor.md
+  limit_handoff: state/limit_handoff.md
+  agent_status: state/agent_status.json
+  agent_events: state/agent_events.jsonl
+  agent_votes: state/agent_votes.json
+  pattern_memory: state/pattern_memory.json
+  ralph_loop: state/ralph_loop.json
+  command_queue: state/command_queue.json
+  loop_summary: state/loop_summary.json
+  gpu_experiment_queue: state/gpu_experiment_queue.json
+  dataset_registry: 03_experiments/dataset_registry.json
+  metric_registry: 03_experiments/metric_registry.json
+  data_roots: 03_experiments/data_roots.md
+  artifact_registry: 03_experiments/artifact_registry.csv
+  experiment_plan: 02_planning/experiment_plan.md
+  experiment_dag: 03_experiments/experiment_dag.json
+  working_experiment_results: 05_results/experiment_results.csv
+  experiment_journal_md: 05_results/experiment_journal.md
+  experiment_journal_csv: 05_results/experiment_journal.csv
+  claim_graph_md: 05_results/claim_graph.md
+  claim_graph_json: 05_results/claim_graph.json
+  terminology: 06_writing/terminology.md
+  baseline_registry: 08_baselines/baseline_registry.json
+  baseline_compare: 08_baselines/baseline_compare.md
+  baseline_code_structure_plan: 08_baselines/code_structure_plan.md
+  agent_quality_audit: 07_reviews/agent_quality_audit.md
+  review_form_registry: review_forms/form_registry.json
+  open_questions: state/open_questions.md
+  next_actions: state/next_actions.md
+  director_plan: 02_planning/director_plan.md
+  decision_log: 02_planning/decision_log.md
+
+output_directories:
+  paper_notes: 01_literature/paper_notes
+  experiment_records: 03_experiments
+  code: 04_code
+  figures: 05_results/figures
+  tables: 05_results/tables
+  writing: 06_writing
+  reviews: 07_reviews
+  baselines: 08_baselines
+  form_reviews: 07_reviews/form_reviews
+  report: 09_report
+
+operating_rules:
+  communication: "Agents communicate through files."
+  evidence: "Every research claim must connect to evidence and uncertainty."
+  updates: "Agents update only files named in their prompt or workflow step."
+  filesystem_safety: "Never delete, move, overwrite, clean, or recursively remove any directory outside the active project folder. For harness maintenance, stay inside this repository and touch only requested files. Destructive commands such as rm -rf, find -delete, git clean -fd, rsync --delete, or shutil.rmtree must not target paths outside the active folder."
+  automation: "Claude/Codex native sessions plus file-based state are the default workflow; browser dashboard and legacy loops are optional support paths."
+  dashboard_optional: "Dashboard support is parked/optional. Default smoke, release, and verify gates do not enforce dashboard JavaScript/API/command-runner checks unless --include-dashboard is passed."
+  agent_status: "For every agent pass, state/agent_status.json is in scope: update the existing agent entry to running before work, heartbeat during long work, and done/waiting/blocked/idle when finished."
+  status_cli: "Do not hand-edit harness JSON. Use scripts/commands/agents/agent_status.py, scripts/commands/agents/agent_messages.py, scripts/commands/agents/agent_orchestrator.py, scripts/commands/review/command_queue.py, scripts/commands/review/progress_checkpoint.py, scripts/commands/projects/state_doctor.py, scripts/commands/projects/project_health.py, scripts/commands/projects/brief_intake.py, scripts/commands/research/research_loop.py, scripts/commands/review/loop_summary.py, scripts/commands/experiments/run_state.py, scripts/commands/experiments/experiment_complete.py, scripts/commands/experiments/experiment_planner.py, scripts/commands/experiments/gpu_scheduler.py, scripts/commands/experiments/gpu_monitor.py, scripts/commands/experiments/result_ingest.py, scripts/commands/research/research_registry.py, scripts/commands/research/phase_gate.py, scripts/commands/reports/resource_ledger.py, scripts/commands/reports/claim_graph.py, scripts/commands/baselines/baseline_library.py, scripts/commands/baselines/baseline_intake.py, scripts/commands/baselines/baseline_compare.py, scripts/commands/baselines/repo_discovery.py, scripts/commands/baselines/baseline_sandbox.py, scripts/commands/projects/create_project.py, scripts/commands/projects/project_intake.py, scripts/commands/projects/import_research_repo.py, scripts/commands/projects/migrate_project.py, scripts/commands/projects/project_resume.py, scripts/commands/projects/project_closeout.py, scripts/commands/review/review_forms.py, scripts/commands/review/agent_quality_audit.py, scripts/commands/reports/artifact_packager.py, and scripts/commands/projects/validate_project.py."
+  progress_capture: "Do not wait until final response to persist research progress. When results, blockers, direction changes, failed assumptions, experiment outcomes, memory notes, or next actions appear, use scripts/commands/review/progress_checkpoint.py to update current_state, agent_memory, next_actions, open_questions, status/events, run logs, or the relevant evidence artifact in the same pass."
+  state_health: "Use scripts/commands/projects/state_doctor.py and scripts/commands/projects/project_health.py when dashboard-free state inspection is needed. state_doctor identifies stale or inconsistent file state; project_health writes state/project_health.md as the plain-language dashboard replacement. Refresh state_doctor first and project_health second. Preview state_doctor repairs with --dry-run-repair before writing missing starter files unless the user explicitly asks to apply immediately. Repair may create only safe starter files or template-backed continuity files; it must not invent research content. State doctor reports repair_mode, repaired_count, repaired files, and repair_errors, and template-backed JSON repairs must validate before write. When command_queue.json or next_actions.md is restored, sync the human-readable next_actions mirror from the structured queue. When findings should become routed work, preview suggested command entries first and then enqueue through these CLIs instead of hand-editing state/command_queue.json."
+  brief_intake: "Use scripts/commands/projects/brief_intake.py when a rough idea needs to become a durable research brief without asking the user to run Python directly."
+  experiment_planning: "Use scripts/commands/experiments/experiment_planner.py to create smoke-first experiment DAGs, identify parallel main runs, and preserve expected outputs/check procedures before GPU dispatch."
+  claim_graph: "Use scripts/commands/reports/claim_graph.py to connect working claims, experiment rows, journal analysis, baselines, and evidence before strengthening paper claims."
+  baseline_compare: "Use scripts/commands/baselines/baseline_compare.py after baseline source snapshots exist to compare repo structure and update the project-side code structure plan."
+  agent_quality_audit: "Use scripts/commands/review/agent_quality_audit.py to check whether completed agent work left enough output-file evidence, checkpoints, and experiment analysis for a fresh session to resume."
+  agent_events: "Agent lifecycle changes append to state/agent_events.jsonl for timeline and performance analysis; inspect it with scripts/commands/agents/agent_events.py."
+  voting_gate: "High-risk or important commands can require multi-agent voting through state/agent_votes.json and scripts/commands/agents/agent_vote.py; scripts/commands/agents/agent_orchestrator.py refuses dispatch until the linked vote is approved."
+  proactive_multi_agent: "Do not wait for the user to explicitly request multi-agent work when a task is deep, broad, or naturally parallel. Identify the local critical path first, then use agent_orchestrator status-parallel/parallel/run-prepared or leader_dispatch to route independent sidecar work with clear dependencies, owners, and expected outputs. Do not parallelize unresolved dependencies, shared write paths, unapproved vote gates, or vague done conditions."
+  parallel_agents: "When several open commands are independent, use scripts/commands/agents/agent_orchestrator.py status-parallel for a read-only view, then use scripts/commands/agents/agent_orchestrator.py parallel to plan or dispatch different owner agents concurrently. Use next --json when another agent needs the serial fallback plus open_parallel_diagnostics, and use parallel --json when another agent needs open_parallel_diagnostics beside the planned command list. Use depends_on and parallel_group in state/command_queue.json to make safe batches explicit, and do not parallelize commands with path conflicts or unapproved vote gates. Explicit parallel --id requests must fail with a concrete reason instead of silently skipping unsafe commands. When prompts were already written and commands are in progress, inspect them with scripts/commands/agents/agent_orchestrator.py run-prepared --dry-run, then use run-prepared with --group or explicit --id values and the configured runner command. run-prepared must fail rather than launch scoped prepared prompts whose depends_on entries are not done. Use --all-prepared only when intentionally running every prepared prompt across groups. After reviewing worker outputs, use scripts/commands/agents/agent_orchestrator.py finish-parallel to close the scoped prepared batch."
+  session_workspaces: "Use scripts/commands/review/session_state.py to create state/sessions/<session_id>/ workspaces for loop-local scratchpads, plans, results, and artifacts."
+  pattern_memory: "Record reusable project-local lessons in state/pattern_memory.json through scripts/commands/review/pattern_memory.py so later agents can search proven triggers, recommendations, and evidence."
+  ralph_loop: "Legacy optional path only. Use scripts/commands/review/ralph_loop.py only when a human explicitly asks for bounded Ralph-loop behavior; otherwise prefer native Claude/Codex sessions plus command_queue, status, messages, session workspaces, and loop_summary."
+  loop_summary: "At the start and end of each research loop, update state/loop_summary.json with scripts/commands/review/loop_summary.py so file-based state shows what changed, the result, completed commands, and next actions."
+  handoff_scope: "Use the repository root HANDOFF.md for harness maintenance and each projects/<name>/HANDOFF.md for project-local research continuity."
+  human_readable_next_actions: "Command and loop next actions should explain the work, reason, and done condition in prose; file paths are traceability outputs, not the primary explanation."
+  reader_report: "09_report/ is the final reader-facing and release-facing artifact folder. Keep active research code in 04_code/ and working analysis/results in 05_results/; export to 09_report/ only when stable enough to share."
+  report_index: "scripts/commands/reports/report_index.py maintains only the final 09_report/README.md artifact index. Routine command/status/GPU/progress updates refresh workflow support surfaces without touching 09_report unless a final/report-facing writer opts in with include_report=True."
+  research_rigor: "Experiment-backed claims require preregistration before execution, reproducibility manifest during execution, statistical robustness during analysis, and reviewer attack matrix before claim strengthening."
+  research_registry: "Datasets and metrics used in final result rows must be registered in 03_experiments/dataset_registry.json and 03_experiments/metric_registry.json through scripts/commands/research/research_registry.py."
+  project_import_migration: "Create/import/migrate projects through scripts/commands/projects/create_project.py, import_research_repo.py, and migrate_project.py so project_created, import_research_repo, and project_migration lifecycle events are recorded."
+  resource_and_phase_tracking: "Track research phase gates with scripts/commands/research/phase_gate.py and resource usage with scripts/commands/reports/resource_ledger.py before claiming a project is ready or compute costs are understood."
+  artifact_packaging: "Create reproducibility manifests and archives with scripts/commands/reports/artifact_packager.py so final packages record artifact_packager lifecycle outputs and include required working evidence such as data_roots, artifact_registry, experiment_results, experiment_journal, and terminology."
+  research_loop: "Use scripts/commands/research/research_loop.py to plan or enqueue the next agent actions from current project evidence gaps; it writes command_queue and agent_messages rather than hidden state."
+  agent_messages: "Agents send questions, handoffs, reviews, blockers, and decisions through state/agent_messages.json with scripts/commands/agents/agent_messages.py; unresolved high-priority blockers prevent strict validation."
+  gpu_experiments: "Queue independent GPU jobs before dispatch, then plan, launch, monitor, and update only through scripts/commands/experiments/gpu_scheduler.py and scripts/commands/experiments/gpu_monitor.py; keep active usage at or below the configured workspace/project GPU cap."
+  gpu_parallel_scheduler: "Use scripts/commands/experiments/gpu_scheduler.py to queue all independent launchable jobs first and dispatch parallel batches by default so idle GPUs are used within max_user_gpus. Use list --json for GPU job dependency readiness, plan --json with plan_diagnostics, and dispatch --json for dry-run selected_jobs plus launch_commands before reducing the batch. Use refresh --json for lifecycle diagnostics and refresh --write to sync scheduler-visible terminal states into gpu_experiment_queue and run_state. Explicit dispatch --ids requests should fail with dependency or capacity diagnostics when a requested job is not dispatchable. The scheduler reads configured queue/node status commands, records gpu_dispatch_plan before executed dispatches, and requires --execute before submitting sbatch jobs."
+  agent_runner_profiles: "External agent execution can use config/workspace_profile.local.json agent_runners profiles. agent_orchestrator dispatch, parallel, and run-prepared accept --runner-profile or fall back to agent_runners.default_profile when --execute needs a non-interactive runner."
+  experiment_results: "Use scripts/commands/experiments/experiment_complete.py, scripts/commands/experiments/result_ingest.py, and scripts/commands/review/progress_checkpoint.py to keep 05_results/experiment_results.csv, 05_results/experiment_journal.md, 05_results/experiment_journal.csv, 05_results/statistical_robustness.md, 03_experiments/artifact_registry.csv, and 03_experiments/<exp_id>/analysis.md current after every completed experiment. Add --final-export only when result or robustness rows are stable enough for 09_report/results/."
+  claim_board: "Use scripts/commands/reports/claim_evidence_board.py build --write for the working board in 05_results/claim_evidence_board.md. Add --final-export only when the board is stable enough for 09_report/results/claim_evidence_board.csv."
+  baseline_library: "Before implementing or comparing baselines, read 08_baselines/, register sources and commands with scripts/commands/baselines/baseline_library.py, run scripts/commands/baselines/baseline_sandbox.py before executing cloned code, and record adaptation notes before claiming reproducibility."
+  baseline_intake: "When baseline papers or repo URLs are provided, use scripts/commands/baselines/baseline_intake.py and scripts/commands/baselines/repo_discovery.py to register papers, resolve repo URLs, clone source repos into 08_baselines/source_snapshots/, inspect structure, scaffold thin adapters and smoke scripts, and update 08_baselines/code_structure_plan.md before structuring 04_code/src/."
+  project_skills: "Use prompts/skills/ to reduce context, speed up repeated workflows, and standardize GPU parallelization, baseline intake, smoke-first experiments, and claim compression."
+  venue_review_forms: "When reviewing papers by venue criteria, select the exact venue/year form from review_forms/form_registry.json, create outputs under 07_reviews/form_reviews/, and fill every required form field with evidence."
+
+# PROJECT_INDEX:START
+generated_inventory:
+  generated_by: "scripts.commands.projects.project_index"
+  root_files:
+    - "AGENTS.md"
+    - "ARCHITECTURE.md"
+    - "CHANGELOG.md"
+    - "CLAUDE.md"
+    - "HANDOFF.md"
+    - "README.md"
+    - "project.yaml"
+    - "pyproject.toml"
+  scripts:
+    count: 137
+    files:
+      - "scripts/commands/__init__.py"
+      - "scripts/commands/agents/__init__.py"
+      - "scripts/commands/agents/agent_dashboard.py"
+      - "scripts/commands/agents/agent_events.py"
+      - "scripts/commands/agents/agent_messages.py"
+      - "scripts/commands/agents/agent_orchestrator.py"
+      - "scripts/commands/agents/agent_runner.py"
+      - "scripts/commands/agents/agent_status.py"
+      - "scripts/commands/agents/agent_vote.py"
+      - "scripts/commands/agents/agents.py"
+      - "scripts/commands/baselines/__init__.py"
+      - "scripts/commands/baselines/baseline_compare.py"
+      - "scripts/commands/baselines/baseline_intake.py"
+      - "scripts/commands/baselines/baseline_library.py"
+      - "scripts/commands/baselines/baseline_sandbox.py"
+      - "scripts/commands/baselines/baselines.py"
+      - "scripts/commands/baselines/repo_discovery.py"
+      - "scripts/commands/dashboard/__init__.py"
+      - "scripts/commands/dashboard/dashboard_command_runner.py"
+      - "scripts/commands/dashboard/dashboard_refresh.py"
+      - "scripts/commands/dashboard/dashboard_sources.py"
+      - "scripts/commands/experiments/__init__.py"
+      - "scripts/commands/experiments/env_capture.py"
+      - "scripts/commands/experiments/experiment_complete.py"
+      - "scripts/commands/experiments/experiment_diagnosis.py"
+      - "scripts/commands/experiments/experiment_planner.py"
+      - "scripts/commands/experiments/experiments.py"
+      - "scripts/commands/experiments/gpu_monitor.py"
+      - "scripts/commands/experiments/gpu_scheduler.py"
+      - "scripts/commands/experiments/log_digest.py"
+      - "scripts/commands/experiments/preregistration_helper.py"
+      - "scripts/commands/experiments/result_ingest.py"
+      - "scripts/commands/experiments/run_checkpoint.py"
+      - "scripts/commands/experiments/run_diff.py"
+      - "scripts/commands/experiments/run_state.py"
+      - "scripts/commands/experiments/seed_variance.py"
+      - "scripts/commands/projects/__init__.py"
+      - "scripts/commands/projects/brief_intake.py"
+      - "scripts/commands/projects/create_project.py"
+      - "scripts/commands/projects/import_research_repo.py"
+      - "scripts/commands/projects/migrate_project.py"
+      - "scripts/commands/projects/project_closeout.py"
+      - "scripts/commands/projects/project_doctor.py"
+      - "scripts/commands/projects/project_health.py"
+      - "scripts/commands/projects/project_hygiene.py"
+      - "scripts/commands/projects/project_index.py"
+      - "scripts/commands/projects/project_intake.py"
+      - "scripts/commands/projects/project_resume.py"
+      - "scripts/commands/projects/projects.py"
+      - "scripts/commands/projects/state_doctor.py"
+      - "scripts/commands/projects/validate_project.py"
+      - "scripts/commands/release/__init__.py"
+      - "scripts/commands/release/automation_setup.py"
+      - "scripts/commands/release/check_publishable.py"
+      - "scripts/commands/release/privacy_audit.py"
+      - "scripts/commands/release/release_check.py"
+      - "scripts/commands/release/smoke_test.py"
+      - "scripts/commands/release/verify_harness.py"
+      - "scripts/commands/release/workflow_audit.py"
+      - "scripts/commands/release/workspace_profile.py"
+      - "scripts/commands/reports/__init__.py"
+      - "scripts/commands/reports/artifact_packager.py"
+      - "scripts/commands/reports/claim_evidence_board.py"
+      - "scripts/commands/reports/claim_graph.py"
+      - "scripts/commands/reports/claims.py"
+      - "scripts/commands/reports/data_metric_audit.py"
+      - "scripts/commands/reports/paper_claim_linter.py"
+      - "scripts/commands/reports/report_index.py"
+      - "scripts/commands/reports/report_snapshot.py"
+      - "scripts/commands/reports/resource_ledger.py"
+      - "scripts/commands/reports/source_credibility_audit.py"
+      - "scripts/commands/reports/weekly_deck.py"
+      - "scripts/commands/reports/weekly_deck_builder.py"
+      - "scripts/commands/reports/weekly_deck_charts.py"
+      - "scripts/commands/research/__init__.py"
+      - "scripts/commands/research/phase_gate.py"
+      - "scripts/commands/research/research_audit.py"
+      - "scripts/commands/research/research_autopilot.py"
+      - "scripts/commands/research/research_loop.py"
+      - "scripts/commands/research/research_registry.py"
+      - "scripts/commands/review/__init__.py"
+      - "scripts/commands/review/agent_quality_audit.py"
+      - "scripts/commands/review/command_queue.py"
+      - "scripts/commands/review/leader_dispatch.py"
+      - "scripts/commands/review/loop_summary.py"
+      - "scripts/commands/review/memory_compact.py"
+      - "scripts/commands/review/pattern_memory.py"
+      - "scripts/commands/review/progress_checkpoint.py"
+      - "scripts/commands/review/ralph_loop.py"
+      - "scripts/commands/review/review_forms.py"
+      - "scripts/commands/review/review_to_revision.py"
+      - "scripts/commands/review/session_state.py"
+      - "scripts/commands/review/worker_result.py"
+      - "scripts/harness/__init__.py"
+      - "scripts/harness/agent_limits.py"
+      - "scripts/harness/command_mirror.py"
+      - "scripts/harness/commands.py"
+      - "scripts/harness/data_roots.py"
+      - "scripts/harness/errors.py"
+      - "scripts/harness/experiment_journal.py"
+      - "scripts/harness/experiment_registry.py"
+      - "scripts/harness/paths.py"
+      - "scripts/harness/project_diagnostics.py"
+      - "scripts/harness/report_lifecycle.py"
+      - "scripts/harness/runner_commands.py"
+      - "scripts/harness/state.py"
+      - "scripts/harness/state_base.py"
+      - "scripts/harness/state_io.py"
+      - "scripts/harness/workflow_hooks.py"
+      - "scripts/harness/workspace_profile.py"
+      - "scripts/tests/conftest.py"
+      - "scripts/tests/test_agent_runner.py"
+      - "scripts/tests/test_automation_setup.py"
+      - "scripts/tests/test_command_registry.py"
+      - "scripts/tests/test_data_roots.py"
+      - "scripts/tests/test_default_runners.py"
+      - "scripts/tests/test_env_capture.py"
+      - "scripts/tests/test_log_digest.py"
+      - "scripts/tests/test_memory_compact.py"
+      - "scripts/tests/test_native_smoke_portability.py"
+      - "scripts/tests/test_orchestrator_prompt.py"
+      - "scripts/tests/test_orchestrator_readiness.py"
+      - "scripts/tests/test_paper_claim_grounding.py"
+      - "scripts/tests/test_prereg_drift.py"
+      - "scripts/tests/test_privacy_audit.py"
+      - "scripts/tests/test_project_hygiene.py"
+      - "scripts/tests/test_project_resume_list.py"
+      - "scripts/tests/test_reconciliation.py"
+      - "scripts/tests/test_research_autopilot.py"
+      - "scripts/tests/test_run_diff.py"
+      - "scripts/tests/test_runner_commands.py"
+      - "scripts/tests/test_seed_variance.py"
+      - "scripts/tests/test_source_credibility_audit.py"
+      - "scripts/tests/test_state_io.py"
+      - "scripts/tests/test_state_logic.py"
+      - "scripts/tests/test_weekly_deck.py"
+      - "scripts/tests/test_workspace_profile.py"
+  dashboard:
+    count: 5
+    files:
+      - "dashboard/README.md"
+      - "dashboard/app.js"
+      - "dashboard/core.js"
+      - "dashboard/index.html"
+      - "dashboard/styles.css"
+  prompts:
+    agents:
+      count: 11
+      files:
+        - "prompts/agents/README.md"
+        - "prompts/agents/code_agent.md"
+        - "prompts/agents/critic.md"
+        - "prompts/agents/data_analyst.md"
+        - "prompts/agents/director.md"
+        - "prompts/agents/experiment_designer.md"
+        - "prompts/agents/literature_reviewer.md"
+        - "prompts/agents/motivation_planner.md"
+        - "prompts/agents/result_interpreter.md"
+        - "prompts/agents/venue_reviewer.md"
+        - "prompts/agents/writing_agent.md"
+    shared:
+      count: 16
+      files:
+        - "prompts/shared/agent_status_protocol.md"
+        - "prompts/shared/baseline_code_protocol.md"
+        - "prompts/shared/evaluation_rubric.md"
+        - "prompts/shared/filesystem_safety_rules.md"
+        - "prompts/shared/leader_dispatch_protocol.md"
+        - "prompts/shared/output_contracts.md"
+        - "prompts/shared/research_brain_protocol.md"
+        - "prompts/shared/research_context.md"
+        - "prompts/shared/research_handoff_graph.md"
+        - "prompts/shared/research_principles.md"
+        - "prompts/shared/research_routing_matrix.md"
+        - "prompts/shared/risk_confidence_matrix.md"
+        - "prompts/shared/server_experiment_rules.md"
+        - "prompts/shared/skill_usage.md"
+        - "prompts/shared/style_guide.md"
+        - "prompts/shared/venue_review_protocol.md"
+    skills:
+      count: 37
+      files:
+        - "prompts/skills/README.md"
+        - "prompts/skills/agent_orchestration.md"
+        - "prompts/skills/agent_quality_audit.md"
+        - "prompts/skills/artifact_packaging.md"
+        - "prompts/skills/baseline_compare.md"
+        - "prompts/skills/brief_intake.md"
+        - "prompts/skills/claim_and_result_evidence.md"
+        - "prompts/skills/claim_graph.md"
+        - "prompts/skills/claim_table_backfill.md"
+        - "prompts/skills/context_budgeting.md"
+        - "prompts/skills/dashboard_refresh.md"
+        - "prompts/skills/experiment_completion.md"
+        - "prompts/skills/experiment_planning.md"
+        - "prompts/skills/experiment_repair.md"
+        - "prompts/skills/experiment_smoke_first.md"
+        - "prompts/skills/fast_baseline_intake.md"
+        - "prompts/skills/gpu_parallel_execution.md"
+        - "prompts/skills/literature_review.md"
+        - "prompts/skills/paper_claim_compression.md"
+        - "prompts/skills/performance_measurement.md"
+        - "prompts/skills/phase_gate.md"
+        - "prompts/skills/privacy_publish_audit.md"
+        - "prompts/skills/progress_checkpoint.md"
+        - "prompts/skills/project_closeout.md"
+        - "prompts/skills/project_health.md"
+        - "prompts/skills/project_hygiene.md"
+        - "prompts/skills/report_hygiene.md"
+        - "prompts/skills/research_repo_import.md"
+        - "prompts/skills/resource_ledger.md"
+        - "prompts/skills/reviewer_risk_matrix.md"
+        - "prompts/skills/run_checkpoint.md"
+        - "prompts/skills/skill_synthesis.md"
+        - "prompts/skills/source_credibility_audit.md"
+        - "prompts/skills/state_doctor.md"
+        - "prompts/skills/weekly_deck.md"
+        - "prompts/skills/workflow_state_reconcile.md"
+        - "prompts/skills/workspace_profile.md"
+  docs:
+    count: 18
+    files:
+      - "docs/automation.md"
+      - "docs/dashboard_parking_plan.md"
+      - "docs/dashboard_ux_spec.md"
+      - "docs/decisions/ADR-001-project-baseline-library.md"
+      - "docs/decisions/ADR-002-venue-review-forms.md"
+      - "docs/decisions/ADR-003-reader-facing-report-folder.md"
+      - "docs/decisions/ADR-004-human-readable-next-actions.md"
+      - "docs/decisions/ADR-005-research-rigor-gates.md"
+      - "docs/decisions/ADR-006-agent-message-bus-and-evidence-graph.md"
+      - "docs/decisions/ADR-007-baseline-intake-and-adapter-scaffolding.md"
+      - "docs/decisions/ADR-008-gpu-parallel-scheduler-and-project-skills.md"
+      - "docs/decisions/ADR-009-auto-research-loop-and-provenance-gates.md"
+      - "docs/decisions/ADR-010-orchestrated-evidence-and-release-gates.md"
+      - "docs/decisions/ADR-011-dashboard-free-health-and-routing.md"
+      - "docs/harness_survey_2026-06-12.md"
+      - "docs/installed_agent_skills.md"
+      - "docs/private_github_publish.md"
+      - "docs/superpowers/specs/2026-06-12-weekly-dev-deck-design.md"
+  review_forms:
+    count: 10
+    files:
+      - "review_forms/README.md"
+      - "review_forms/form_registry.json"
+      - "review_forms/venues/_template/YYYY/main/review_form.md"
+      - "review_forms/venues/_template/YYYY/main/rubric.md"
+      - "review_forms/venues/cvpr/2026/main/review_form.md"
+      - "review_forms/venues/cvpr/2026/main/rubric.md"
+      - "review_forms/venues/eccv/2026/main/review_form.md"
+      - "review_forms/venues/eccv/2026/main/rubric.md"
+      - "review_forms/venues/iclr/2026/main/review_form.md"
+      - "review_forms/venues/iclr/2026/main/rubric.md"
+  workflows:
+    count: 3
+    files:
+      - "workflows/default_research_flow.yaml"
+      - "workflows/experiment_debug_flow.yaml"
+      - "workflows/paper_iteration_flow.yaml"
+  config:
+    count: 2
+    files:
+      - "config/README.md"
+      - "config/workspace_profile.example.json"
+# PROJECT_INDEX:END

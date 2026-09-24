@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "project": "{{PROJECT_NAME}}",
+  "nodes": [],
+  "edges": [],
+  "summary": {
+    "claims": 0,
+    "experiments": 0,
+    "analysis_nodes": 0,
+    "edges": 0
+  }
+}

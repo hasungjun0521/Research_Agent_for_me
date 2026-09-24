@@ -1,0 +1,23 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "schema_version": 1,
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "max_user_gpus": 1,
+  "status_values": [
+    "blocked",
+    "cancelled",
+    "deferred",
+    "failed",
+    "queued",
+    "running",
+    "succeeded"
+  ],
+  "gpu_types": [
+    "a100",
+    "a4000",
+    "a5000",
+    "a6000",
+    "auto"
+  ],
+  "jobs": []
+}

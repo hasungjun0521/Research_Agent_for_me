@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research Agent Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>Research Agent Dashboard</h1>
+        <div class="subtitle" id="subtitle">No project loaded.</div>
+      </div>
+      <div class="controls" id="fileControls">
+        <label class="file-button" for="projectInput">Load Project Folder</label>
+        <input id="projectInput" type="file" webkitdirectory directory multiple>
+        <button class="secondary" id="clearButton" type="button">Clear</button>
+        <span class="refresh-indicator snapshot">Snapshot mode</span>
+      </div>
+      <div class="controls" id="serverControls" hidden>
+        <select id="projectSelect" aria-label="Project"></select>
+        <button id="refreshButton" type="button">Refresh</button>
+        <span class="refresh-indicator live" id="refreshStatus">Live refresh: 5s</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="notice" id="notice"></div>
+
+    <section class="korean-summary" aria-label="Current work summary" data-dashboard-section="overview">
+      <article class="korean-summary-card work">
+        <div class="section-kicker">Current instruction</div>
+        <div class="korean-summary-title">What happened this instruction</div>
+        <p class="korean-summary-body" id="koreanWorkSummary">-</p>
+      </article>
+      <article class="korean-summary-card result">
+        <div class="section-kicker">Results</div>
+        <div class="korean-summary-title">Result analysis</div>
+        <p class="korean-summary-body" id="koreanResultSummary">-</p>
+      </article>
+      <article class="korean-summary-card next">
+        <div class="section-kicker">Next command</div>
+        <div class="korean-summary-title">Next action</div>
+        <p class="korean-summary-body" id="koreanNextSummary">-</p>
+      </article>
+    </section>
+
+    <section class="run-readiness-panel" aria-label="Run readiness gate" data-dashboard-section="overview">
+      <div class="panel-head flat-head">
+        <div>
+          <h2>Run Readiness Gate</h2>
+          <span class="hint" id="runReadinessSummary">No readiness verdict</span>
+        </div>
+        <span class="readiness-verdict" id="runReadinessVerdict">-</span>
+      </div>
+      <div class="panel-body run-readiness-grid" id="runReadinessGate"></div>
+    </section>
+
+    <section class="control-strip" aria-label="Dashboard controls">
+      <div class="segmented-control" role="tablist" aria-label="View mode">
+        <button class="segmented active" type="button" data-view="overview">Overview</button>
+        <button class="segmented" type="button" data-view="work">Work</button>
+        <button class="segmented" type="button" data-view="results">Results</button>
+        <button class="segmented" type="button" data-view="console">Console</button>
+        <button class="segmented" type="button" data-view="debug">Debug</button>
+      </div>
+      <label class="search-box">
+        <span>Search</span>
+        <input id="dashboardSearch" type="search" placeholder="Find commands, agents, runs, files">
+      </label>
+      <div class="status-filters compact-hidden" role="group" aria-label="Status filter">
+        <button class="filter-chip active" type="button" data-status-filter="all">All</button>
+        <button class="filter-chip" type="button" data-status-filter="running">Running</button>
+        <button class="filter-chip" type="button" data-status-filter="waiting">Waiting</button>
+        <button class="filter-chip" type="button" data-status-filter="blocked">Blocked</button>
+        <button class="filter-chip" type="button" data-status-filter="done">Done</button>
+      </div>
+      <div class="toolbar-actions">
+        <button class="secondary micro-button" id="pauseButton" type="button">Pause Live</button>
+        <button class="secondary micro-button" id="clearFiltersButton" type="button">Clear Filters</button>
+      </div>
+    </section>
+
+    <section class="overview-console" aria-label="Research operations overview" data-dashboard-section="overview">
+      <article class="overview-lane now">
+        <div class="section-kicker">Happening Now</div>
+        <h2>What is happening now</h2>
+        <div class="overview-lane-body" id="overviewNow"></div>
+      </article>
+      <article class="overview-lane completed">
+        <div class="section-kicker">Completed</div>
+        <h2>What was completed</h2>
+        <div class="overview-lane-body" id="overviewCompleted"></div>
+      </article>
+      <article class="overview-lane results">
+        <div class="section-kicker">Results</div>
+        <h2>Results and artifacts</h2>
+        <div class="overview-lane-body" id="overviewResults"></div>
+      </article>
+      <article class="overview-lane blocked">
+        <div class="section-kicker">Blocked</div>
+        <h2>What is blocked</h2>
+        <div class="overview-lane-body" id="overviewBlocked"></div>
+      </article>
+      <article class="overview-lane next">
+        <div class="overview-lane-head">
+          <div>
+            <div class="section-kicker">Next</div>
+            <h2>Command and prompt</h2>
+          </div>
+          <button class="micro-button" type="button" data-copy-snippet="overviewNextPromptText">Copy Prompt</button>
+        </div>
+        <div class="overview-lane-body" id="overviewNext"></div>
+        <pre class="overview-prompt" id="overviewNextPromptText"></pre>
+      </article>
+    </section>
+
+    <section class="research-command-panel" aria-label="Research readiness" data-dashboard-section="overview">
+      <div class="panel-head flat-head">
+        <div>
+          <h2>Research Readiness</h2>
+          <span class="hint" id="readinessSummary">No readiness data</span>
+        </div>
+        <span class="readiness-score" id="readinessScore">0%</span>
+      </div>
+      <div class="panel-body readiness-grid" id="readinessGrid"></div>
+    </section>
+
+    <section class="research-phase-panel" aria-label="Research phase map" data-dashboard-section="overview">
+      <div class="panel-head flat-head">
+        <div>
+          <h2>Research Phase Map</h2>
+          <span class="hint">Brief to final report flow</span>
+        </div>
+      </div>
+      <div class="panel-body phase-track" id="researchPhaseTrack"></div>
+    </section>
+
+    <section class="executive-grid" aria-label="Dashboard overview details" data-dashboard-section="debug">
+      <article class="executive-card mission">
+        <div class="section-kicker">Current Mission</div>
+        <h2 class="hero-title" id="heroGoal">-</h2>
+        <p class="hero-copy" id="heroSummary">No loop summary loaded.</p>
+        <div class="chips" id="heroMeta"></div>
+        <div class="hero-next-action">
+          <div class="section-kicker">Next Action</div>
+          <strong id="heroNextAction">-</strong>
+        </div>
+      </article>
+
+      <article class="executive-card prompt">
+        <div class="hero-card-head">
+          <div>
+            <div class="section-kicker">Next Prompt</div>
+            <div class="hint" id="heroNextPromptSource">Ready for next Codex turn</div>
+          </div>
+          <button class="micro-button" type="button" data-copy-snippet="heroNextPromptText">Copy</button>
+        </div>
+        <pre class="hero-prompt" id="heroNextPromptText"></pre>
+      </article>
+
+      <article class="executive-card status-board">
+        <div class="section-kicker">Live State</div>
+        <div class="hero-status-grid">
+          <div class="hero-stat"><span>Running</span><strong id="heroActiveCount">0</strong></div>
+          <div class="hero-stat"><span>Waiting</span><strong id="heroWaitingCount">0</strong></div>
+          <div class="hero-stat"><span>Blocked</span><strong id="heroBlockedCount">0</strong></div>
+          <div class="hero-stat"><span>Agents</span><strong id="heroTotalCount">0</strong></div>
+        </div>
+        <div class="stack" id="heroRunningStack"></div>
+      </article>
+    </section>
+
+    <section class="loop-overview" aria-label="Research loop summary" data-dashboard-section="results">
+      <article class="loop-card main">
+        <div class="eyebrow">This Loop</div>
+        <div class="focus-title" id="loopGoal">-</div>
+        <p class="focus-copy" id="loopSummary">No loop summary loaded.</p>
+        <div class="chips" id="loopMeta"></div>
+        <div class="focus-meta">Outcome: <strong id="loopOutcome">-</strong></div>
+      </article>
+
+      <article class="loop-card result">
+        <div class="eyebrow">Results</div>
+        <div class="loop-list" id="loopResults"></div>
+      </article>
+
+      <article class="loop-card next">
+        <div class="eyebrow">Next Actions</div>
+        <div class="loop-list" id="loopNextActions"></div>
+      </article>
+    </section>
+
+    <section class="panel command-board-panel" aria-label="Command board" data-dashboard-section="work">
+      <div class="panel-head">
+        <h2>Command Board</h2>
+        <span class="hint" id="commandBoardCount">0 commands</span>
+      </div>
+      <div class="panel-body command-board" id="commandBoard"></div>
+    </section>
+
+    <section class="panel flow-panel" aria-label="Pipeline and handoff" data-dashboard-section="work">
+      <div class="panel-head">
+        <h2>Pipeline & Handoff</h2>
+        <span class="hint" id="flowCount">0 steps</span>
+      </div>
+      <div class="panel-body flow-layout">
+        <div class="flow-canvas" id="agentFlowDiagram"></div>
+        <aside class="flow-side">
+          <div class="eyebrow">Routing Summary</div>
+          <div class="flow-summary" id="agentFlowSummary"></div>
+          <div class="flow-legend" id="agentFlowLegend"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Agent messages" data-dashboard-section="work">
+      <div class="panel-head">
+        <h2>Blockers & Agent Messages</h2>
+        <span class="hint" id="messageCount">0 open</span>
+      </div>
+      <div class="panel-body command-list" id="agentMessages"></div>
+    </section>
+
+    <section class="panel blocker-triage-panel" aria-label="Blocker triage" data-dashboard-section="work">
+      <div class="panel-head">
+        <h2>Blocker Triage</h2>
+        <span class="hint" id="blockerTriageCount">0 blockers</span>
+      </div>
+      <div class="panel-body blocker-triage-list" id="blockerTriageList"></div>
+    </section>
+
+    <section class="workbench commands" data-dashboard-section="debug">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Vote Gates</h2>
+          <span class="hint" id="voteCount">0 decisions</span>
+        </div>
+        <div class="panel-body run-list" id="voteList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Session Workspaces</h2>
+          <span class="hint" id="sessionCount">0 sessions</span>
+        </div>
+        <div class="panel-body run-list" id="sessionList"></div>
+      </div>
+    </section>
+
+    <section class="workbench commands" data-dashboard-section="debug">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Agent Event Timeline</h2>
+          <span class="hint" id="eventCount">0 events</span>
+        </div>
+        <div class="panel-body run-list" id="eventList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Pattern Memory</h2>
+          <span class="hint" id="patternCount">0 patterns</span>
+        </div>
+        <div class="panel-body run-list" id="patternList"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Ralph loop" style="margin-bottom: 16px;" data-dashboard-section="work">
+      <div class="panel-head">
+        <h2>Ralph Loop</h2>
+        <span class="hint" id="ralphCount">0 runs</span>
+      </div>
+      <div class="panel-body run-list" id="ralphList"></div>
+    </section>
+
+    <section class="panel report-snapshot-panel" aria-label="09_report snapshot" style="margin-bottom: 16px;" data-dashboard-section="results">
+      <div class="panel-head">
+        <h2>09_report Snapshot</h2>
+        <span class="hint" id="reportSnapshotUpdated">No report snapshot</span>
+      </div>
+      <div class="panel-body report-snapshot-grid">
+        <div class="report-snapshot-summary" id="reportSnapshotSummary"></div>
+        <pre id="reportReadmeExcerpt"></pre>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Report results" style="margin-bottom: 16px;" data-dashboard-section="results">
+      <div class="panel-head">
+        <h2>Report Results</h2>
+        <span class="hint" id="reportResultCount">0 report files</span>
+      </div>
+      <div class="panel-body run-list" id="reportResultList"></div>
+    </section>
+
+    <section class="panel evidence-map-panel" aria-label="Evidence map" style="margin-bottom: 16px;" data-dashboard-section="results">
+      <div class="panel-head">
+        <h2>Evidence Map</h2>
+        <span class="hint" id="evidenceMapCount">0 claims</span>
+      </div>
+      <div class="panel-body evidence-map-list" id="evidenceMapList"></div>
+    </section>
+
+    <section class="panel experiment-comparison-panel" aria-label="Experiment comparison" style="margin-bottom: 16px;" data-dashboard-section="results">
+      <div class="panel-head">
+        <h2>Experiment Comparison</h2>
+        <span class="hint" id="experimentComparisonCount">0 rows</span>
+      </div>
+      <div class="panel-body" id="experimentComparisonTable"></div>
+    </section>
+
+    <section class="panel table-preview-panel" aria-label="Result table previews" style="margin-bottom: 16px;" data-dashboard-section="results">
+      <div class="panel-head">
+        <h2>Table Preview</h2>
+        <span class="hint" id="tablePreviewCount">0 tables</span>
+      </div>
+      <div class="panel-body table-preview-list" id="tablePreviewList"></div>
+    </section>
+
+    <section class="panel next-prompt-panel" aria-label="Next prompt" data-dashboard-section="work">
+      <div class="panel-head">
+        <h2>Next Prompt</h2>
+        <span class="hint" id="nextPromptHint">Ready for the next agent pass</span>
+      </div>
+      <div class="panel-body next-prompt-grid">
+        <pre id="nextPromptText"></pre>
+        <div class="prompt-side">
+          <button class="micro-button" type="button" data-copy-snippet="nextPromptText">Copy Prompt</button>
+          <button class="secondary micro-button" id="inspectNextPrompt" type="button">Inspect Source</button>
+          <div class="hint" id="nextPromptSource">-</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="console-layout" aria-label="Command console" data-dashboard-section="console">
+      <div class="console-main panel">
+        <div class="panel-head">
+          <h2>Command Console</h2>
+          <span class="hint" id="consoleProjectHint">Safe copy-ready runbook</span>
+        </div>
+        <div class="panel-body console-grid">
+          <div class="terminal-pane">
+            <div class="terminal-title">Next Prompt</div>
+            <pre id="consolePromptText"></pre>
+          </div>
+          <div class="terminal-pane">
+            <div class="terminal-title">Recent Event Stream</div>
+            <pre id="consoleEventStream"></pre>
+          </div>
+          <div class="terminal-pane command-output-pane">
+            <div class="terminal-title">Command Output</div>
+            <pre id="consoleRunOutput">Command runner is disabled unless the dashboard server is started with --enable-command-runner.</pre>
+          </div>
+        </div>
+      </div>
+      <aside class="console-side panel">
+        <div class="panel-head">
+          <h2>Runbook</h2>
+          <span class="hint">Copy, run locally</span>
+        </div>
+        <div class="panel-body console-command-list" id="consoleCommandList"></div>
+      </aside>
+    </section>
+
+    <section class="panel operator-panel" aria-label="Operator console" data-dashboard-section="debug">
+      <div class="panel-head">
+        <h2>Operator Console</h2>
+        <span class="hint" id="operatorHint">Copy-ready CLI</span>
+      </div>
+      <div class="panel-body snippet-grid">
+        <article class="snippet-card">
+          <div class="snippet-head">
+            <div class="snippet-title">Loop Update</div>
+            <button class="micro-button" type="button" data-copy-snippet="loopUpdateSnippet">Copy</button>
+          </div>
+          <pre id="loopUpdateSnippet"></pre>
+        </article>
+        <article class="snippet-card">
+          <div class="snippet-head">
+            <div class="snippet-title">Agent Heartbeat</div>
+            <button class="micro-button" type="button" data-copy-snippet="agentHeartbeatSnippet">Copy</button>
+          </div>
+          <pre id="agentHeartbeatSnippet"></pre>
+        </article>
+        <article class="snippet-card">
+          <div class="snippet-head">
+            <div class="snippet-title">Command Update</div>
+            <button class="micro-button" type="button" data-copy-snippet="commandUpdateSnippet">Copy</button>
+          </div>
+          <pre id="commandUpdateSnippet"></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="command-center" aria-label="Live command state" data-dashboard-section="work">
+      <div class="focus-block primary">
+        <div class="eyebrow">Current Stage</div>
+        <div class="focus-title" id="focusStage">-</div>
+        <p class="focus-copy" id="focusDecision">No current state loaded.</p>
+        <div class="focus-meta">Status updated: <strong id="focusUpdated">-</strong></div>
+      </div>
+
+      <div class="focus-block live">
+        <div class="eyebrow">Running Now</div>
+        <div class="stack" id="runningStack"></div>
+      </div>
+
+      <div class="focus-block command">
+        <div class="eyebrow">Next Command</div>
+        <div class="focus-title" id="nextCommandTitle">-</div>
+        <div class="chips" id="nextCommandMeta"></div>
+        <p class="focus-copy" id="nextCommandOutput"></p>
+      </div>
+    </section>
+
+    <section class="summary" aria-label="Agent summary" data-dashboard-section="work">
+      <div class="metric running">
+        <div class="metric-label">Running</div>
+        <div class="metric-value" id="activeCount">0</div>
+      </div>
+      <div class="metric waiting">
+        <div class="metric-label">Waiting</div>
+        <div class="metric-value" id="waitingCount">0</div>
+      </div>
+      <div class="metric blocked">
+        <div class="metric-label">Blocked</div>
+        <div class="metric-value" id="blockedCount">0</div>
+      </div>
+      <div class="metric total">
+        <div class="metric-label">Total Agents</div>
+        <div class="metric-value" id="totalCount">0</div>
+      </div>
+    </section>
+
+    <section class="workbench commands" data-dashboard-section="work">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Active Commands</h2>
+          <span class="hint" id="commandCount">0 active</span>
+        </div>
+        <div class="panel-body command-list" id="commandQueue"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Completed Commands</h2>
+          <span class="hint" id="completedCommandCount">0 completed</span>
+        </div>
+        <div class="panel-body command-list" id="completedCommandHistory"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Project snapshot" style="margin-bottom: 16px;" data-dashboard-section="debug">
+      <div class="panel-head">
+        <h2>Project Snapshot</h2>
+        <span class="hint" id="projectPath">-</span>
+      </div>
+      <div class="panel-body snapshot">
+        <div class="row"><span>Running</span><strong id="runningNames">None</strong></div>
+        <div class="row"><span>Waiting</span><strong id="waitingNames">None</strong></div>
+        <div class="row"><span>Last refresh</span><strong id="loadedAt">-</strong></div>
+        <div class="row"><span>Source update</span><strong id="sourceUpdated">-</strong></div>
+        <div class="row"><span>Stage</span><strong id="currentStage">-</strong></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Dashboard data coverage" style="margin-bottom: 16px;" data-dashboard-section="debug">
+      <div class="panel-head">
+        <h2>Data Coverage</h2>
+        <span class="hint" id="sourceCoverageCount">0/0 sources</span>
+      </div>
+      <div class="panel-body source-list" id="sourceCoverageList"></div>
+    </section>
+
+    <section class="panel" aria-label="Experiment runs" style="margin-bottom: 16px;" data-dashboard-section="results work">
+      <div class="panel-head">
+        <h2>Experiment Runs</h2>
+        <span class="hint" id="runCount">0 runs</span>
+      </div>
+      <div class="panel-body run-list" id="runList"></div>
+    </section>
+
+    <section class="workbench commands" data-dashboard-section="work">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>GPU Queue</h2>
+          <span class="hint" id="gpuQueueCount">0 jobs</span>
+        </div>
+        <div class="panel-body run-list" id="gpuQueueList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Data Registry</h2>
+          <span class="hint" id="registryCount">0 datasets · 0 metrics</span>
+        </div>
+        <div class="panel-body registry-grid" id="registryGrid"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Agent cards" data-dashboard-section="debug">
+      <div class="panel-head">
+        <h2>Agent Status</h2>
+        <span class="hint" id="lastUpdated">Status updated: -</span>
+      </div>
+      <div class="panel-body">
+        <div class="agent-grid" id="agentGrid"></div>
+      </div>
+    </section>
+
+    <section class="details-grid" aria-label="Raw state files" style="margin-top: 16px;" data-dashboard-section="debug">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Current State File</h2>
+        </div>
+        <div class="panel-body">
+          <pre id="currentState"></pre>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Next Actions File</h2>
+        </div>
+        <div class="panel-body">
+          <pre id="nextActions"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="detail-drawer" id="detailDrawer" aria-hidden="true" role="dialog" aria-label="Selected item details" hidden>
+    <div class="drawer-head">
+      <div>
+        <div class="eyebrow" id="drawerType">Details</div>
+        <div class="drawer-title" id="drawerTitle">-</div>
+      </div>
+      <button class="secondary micro-button" id="drawerClose" type="button">Close</button>
+    </div>
+    <div class="drawer-chips chips" id="drawerChips"></div>
+    <div class="drawer-body">
+      <pre id="drawerBody"></pre>
+    </div>
+    <div class="drawer-actions">
+      <button class="micro-button" id="copyDrawerJson" type="button">Copy JSON</button>
+      <button class="secondary micro-button" id="copyDrawerCli" type="button">Copy CLI</button>
+    </div>
+  </aside>
+
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

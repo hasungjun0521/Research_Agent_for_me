@@ -1,0 +1,241 @@
+name: default_research_flow
+description: "File-state-first research workflow from motivation to revision planning."
+progress_capture:
+  command: "python -m scripts.commands.review.progress_checkpoint record"
+  when: "Record a checkpoint during any step when a result, blocker, direction change, failed assumption, experiment outcome, memory note, or next-action change appears before the final response."
+  experiment_outputs:
+    - 03_experiments/<exp_id>/analysis.md
+    - 05_results/experiment_journal.md
+    - 05_results/experiment_journal.csv
+steps:
+  - id: motivation_check
+    agent: motivation_planner
+    description: "Refine motivation, problem statement, contribution candidates, and claims to validate."
+    input_files:
+      - 00_brief/intake_wizard.md
+      - 00_brief/research_question.md
+      - 00_brief/motivation.md
+      - 00_brief/problem_statement.md
+      - 00_brief/assumptions.md
+      - 00_brief/constraints.md
+      - 00_brief/contribution_candidates.md
+      - state/current_state.md
+    output_files:
+      - 02_planning/intake_summary.md
+      - 00_brief/motivation.md
+      - 00_brief/problem_statement.md
+      - 00_brief/contribution_candidates.md
+      - state/open_questions.md
+    success_criteria:
+      - "Research motivation identifies audience, problem, and why it matters."
+      - "Contribution candidates are testable and marked with evidence needs."
+
+  - id: literature_review
+    agent: literature_reviewer
+    description: "Review prior work and identify fair, evidence-backed gaps."
+    input_files:
+      - 00_brief/research_question.md
+      - 00_brief/contribution_candidates.md
+      - 01_literature/papers.bib
+      - 01_literature/paper_notes/
+    output_files:
+      - 01_literature/related_work_matrix.md
+      - 01_literature/gap_analysis.md
+      - 01_literature/prior_limitations.md
+    success_criteria:
+      - "Related work matrix names relevant methods, strengths, limitations, and relevance."
+      - "Gap analysis separates supported gaps from uncertain gaps."
+
+  - id: director_planning
+    agent: director
+    description: "Diagnose state and convert motivation and literature into an execution plan."
+    input_files:
+      - state/current_state.md
+      - state/project_health.md
+      - state/state_doctor.md
+      - 00_brief/
+      - 01_literature/
+      - 02_planning/director_plan.md
+    output_files:
+      - state/project_health.md
+      - state/state_doctor.md
+      - 02_planning/director_plan.md
+      - 02_planning/task_graph.md
+      - state/current_state.md
+      - state/next_actions.md
+    success_criteria:
+      - "Next agent and required inputs are explicit."
+      - "Plan identifies blockers and highest-risk uncertainty."
+
+  - id: experiment_design
+    agent: experiment_designer
+    description: "Translate claims into testable hypotheses, baselines, metrics, and experiments."
+    input_files:
+      - 00_brief/contribution_candidates.md
+      - 01_literature/gap_analysis.md
+      - 03_experiments/metrics.md
+      - 03_experiments/data_roots.md
+    output_files:
+      - 02_planning/experiment_plan.md
+      - 03_experiments/experiment_dag.json
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/metrics.md
+      - 03_experiments/data_roots.md
+      - 03_experiments/exp_001/hypothesis.md
+      - 03_experiments/exp_001/config.yaml
+    success_criteria:
+      - "Each experiment maps to a hypothesis and expected signal."
+      - "Baselines, metrics, ablations, and confounders are named."
+      - "The plan starts with a smoke node and marks independent main-run nodes for parallel dispatch when safe."
+
+  - id: code_generation
+    agent: code_agent
+    description: "Implement or modify the code needed to run the planned experiment."
+    input_files:
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/experiment_dag.json
+      - 03_experiments/exp_001/config.yaml
+      - 08_baselines/baseline_compare.md
+      - 08_baselines/code_structure_plan.md
+      - 04_code/
+    output_files:
+      - 04_code/src/
+      - 04_code/tests/
+      - 04_code/implementation_notes.md
+      - 03_experiments/exp_001/run_log.md
+    success_criteria:
+      - "Code changes are scoped and reviewable."
+      - "Run instructions and test plan are documented."
+
+  - id: result_analysis
+    agent: data_analyst
+    description: "Analyze experiment outputs and compare results to baselines."
+    input_files:
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/metrics.md
+      - 03_experiments/data_roots.md
+      - 03_experiments/exp_001/results/
+      - 03_experiments/exp_001/run_log.md
+    output_files:
+      - 03_experiments/exp_001/analysis.md
+      - 05_results/aggregate_results.md
+      - 05_results/experiment_journal.md
+      - 05_results/experiment_journal.csv
+      - 05_results/failure_cases.md
+    success_criteria:
+      - "Data quality checks are complete."
+      - "Observations are separated from explanations."
+      - "The experiment journal records why the experiment was run, what happened, and why performance moved."
+
+  - id: result_interpretation
+    agent: result_interpreter
+    description: "Map analyzed results back to hypotheses and research claims."
+    input_files:
+      - 03_experiments/exp_001/hypothesis.md
+      - 03_experiments/exp_001/analysis.md
+      - 03_experiments/data_roots.md
+      - 05_results/aggregate_results.md
+      - 05_results/experiment_journal.md
+      - 05_results/claim_graph.md
+      - 05_results/claim_graph.json
+      - 05_results/failure_cases.md
+    output_files:
+      - 05_results/interpretation.md
+      - 05_results/claim_graph.md
+      - 05_results/claim_graph.json
+      - 05_results/experiment_journal.md
+      - 00_brief/contribution_candidates.md
+      - state/open_questions.md
+    success_criteria:
+      - "Supported and unsupported claims are explicitly separated."
+      - "Caveats and alternative explanations are recorded."
+      - "The working claim graph connects claims to experiment rows and analysis notes before paper claims are strengthened."
+
+  - id: writing
+    agent: writing_agent
+    description: "Draft or revise paper sections using evidence-backed claims."
+    input_files:
+      - 00_brief/
+      - 01_literature/
+      - 03_experiments/
+      - 05_results/
+      - 05_results/claim_graph.md
+      - 06_writing/
+      - 06_writing/terminology.md
+    output_files:
+      - 06_writing/outline.md
+      - 06_writing/terminology.md
+      - 06_writing/draft.md
+      - 06_writing/limitations.md
+    success_criteria:
+      - "Draft claims are evidence-aligned and cite available sources."
+      - "Missing evidence is marked rather than hidden."
+
+  - id: report_export
+    agent: writing_agent
+    description: "Export stable reader-facing paper/result artifacts from working folders when they are ready."
+    input_files:
+      - 05_results/interpretation.md
+      - 05_results/claim_evidence_board.md
+      - 06_writing/terminology.md
+      - 06_writing/draft.md
+      - 06_writing/
+    output_files:
+      - 09_report/paper/main.tex
+      - 09_report/results/claim_evidence.csv
+    success_criteria:
+      - "Only stable reader-facing claims and text are exported."
+      - "Any unstable claim remains in working files or open questions."
+
+  - id: critique
+    agent: critic
+    description: "Review the draft for validity, novelty, baseline, and clarity risks."
+    input_files:
+      - 06_writing/draft.md
+      - 09_report/paper/main.tex
+      - 06_writing/terminology.md
+      - 00_brief/contribution_candidates.md
+      - 01_literature/gap_analysis.md
+      - 05_results/interpretation.md
+      - 05_results/claim_graph.md
+    output_files:
+      - 07_reviews/agent_quality_audit.md
+      - 07_reviews/critic_comments.md
+      - 07_reviews/reviewer_attack_surface.md
+      - 07_reviews/revision_plan.md
+    success_criteria:
+      - "Reviewer objections are concrete and prioritized."
+      - "Required revisions map to files or analyses."
+
+  - id: venue_review
+    agent: venue_reviewer
+    description: "Review the draft with the selected venue/year form when a target venue is known."
+    input_files:
+      - review_forms/form_registry.json
+      - 07_reviews/venue_review_plan.md
+      - 06_writing/draft.md
+      - 05_results/interpretation.md
+    output_files:
+      - 07_reviews/form_reviews/
+      - 07_reviews/revision_plan.md
+      - state/open_questions.md
+    success_criteria:
+      - "Every required form field is answered or marked as insufficient evidence."
+      - "Scores cite evidence and use the venue's scale."
+
+  - id: director_revision_plan
+    agent: director
+    description: "Convert critique into a prioritized revision plan."
+    input_files:
+      - 07_reviews/critic_comments.md
+      - 07_reviews/reviewer_attack_surface.md
+      - 07_reviews/revision_plan.md
+      - state/current_state.md
+    output_files:
+      - 02_planning/director_plan.md
+      - state/current_state.md
+      - state/next_actions.md
+      - 07_reviews/revision_plan.md
+    success_criteria:
+      - "Revision plan names owner agent, inputs, outputs, and priority."
+      - "Current state reflects the next iteration."

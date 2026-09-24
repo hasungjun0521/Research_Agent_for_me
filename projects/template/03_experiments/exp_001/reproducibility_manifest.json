@@ -1,0 +1,60 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "exp_id": "exp_001",
+  "hypothesis": {
+    "file": "03_experiments/exp_001/hypothesis.md",
+    "claim_id": ""
+  },
+  "dataset": {
+    "name": "",
+    "version": "",
+    "path": "",
+    "split": "",
+    "checksum": "",
+    "license_or_access_notes": ""
+  },
+  "code": {
+    "working_dir": "04_code",
+    "commit": "",
+    "entrypoint": "",
+    "config": "03_experiments/exp_001/config.yaml"
+  },
+  "environment": {
+    "python": "",
+    "dependencies": "",
+    "container": "",
+    "env_file": ""
+  },
+  "randomness": {
+    "seeds": [],
+    "determinism_notes": ""
+  },
+  "command": {
+    "train_or_run": "",
+    "analysis": "",
+    "expected_runtime": ""
+  },
+  "hardware": {
+    "gpu_type": "",
+    "gpu_count": "",
+    "node": "",
+    "slurm_job": ""
+  },
+  "baselines": [],
+  "evidence": {
+    "data_roots": "03_experiments/data_roots.md",
+    "run_log": "03_experiments/exp_001/run_log.md",
+    "raw_results": "03_experiments/exp_001/results/",
+    "analysis": "03_experiments/exp_001/analysis.md"
+  },
+  "outputs": {
+    "aggregate_results": "05_results/aggregate_results.md",
+    "experiment_journal": "05_results/experiment_journal.md",
+    "robustness": "05_results/statistical_robustness.md",
+    "working_tables": "05_results/tables/",
+    "working_figures": "05_results/figures/",
+    "final_report_table": "09_report/results/experiment_results.csv",
+    "final_robustness_table": "09_report/results/statistical_robustness.csv",
+    "final_claim_evidence": "09_report/results/claim_evidence.csv"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "schema_version": 1,
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "status_values": [
+    "active",
+    "candidate",
+    "deprecated"
+  ],
+  "patterns": []
+}

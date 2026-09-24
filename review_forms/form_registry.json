@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "last_updated": "",
+  "forms": [
+    {
+      "id": "venue_year_template",
+      "venue": "VENUE",
+      "year": "YYYY",
+      "track": "main",
+      "stage": "review",
+      "form_path": "review_forms/venues/_template/YYYY/main/review_form.md",
+      "rubric_path": "review_forms/venues/_template/YYYY/main/rubric.md",
+      "score_fields": [
+        {
+          "id": "overall",
+          "label": "Overall recommendation",
+          "scale": "venue-defined"
+        },
+        {
+          "id": "confidence",
+          "label": "Reviewer confidence",
+          "scale": "venue-defined"
+        },
+        {
+          "id": "soundness",
+          "label": "Soundness",
+          "scale": "venue-defined"
+        },
+        {
+          "id": "significance",
+          "label": "Significance",
+          "scale": "venue-defined"
+        },
+        {
+          "id": "originality",
+          "label": "Originality",
+          "scale": "venue-defined"
+        },
+        {
+          "id": "presentation",
+          "label": "Presentation",
+          "scale": "venue-defined"
+        }
+      ],
+      "decision_values": [
+        "accept",
+        "borderline",
+        "reject",
+        "not_applicable"
+      ],
+      "llm_review_generation_allowed": null,
+      "llm_policy_scope": "",
+      "allowed_llm_use_cases": [
+        "internal_mock_review",
+        "manual_worksheet"
+      ],
+      "llm_policy": "",
+      "source_note": "Template entry. Copy to a venue/year-specific entry and replace form text with the exact review form.",
+      "notes": "Template entry. Copy to a venue/year-specific entry and replace form text with the exact review form.",
+      "created_at": "",
+      "updated_at": ""
+    },
+    {
+      "id": "eccv_2026_main",
+      "venue": "ECCV",
+      "year": "2026",
+      "track": "main",
+      "stage": "review",
+      "form_path": "review_forms/venues/eccv/2026/main/review_form.md",
+      "rubric_path": "review_forms/venues/eccv/2026/main/rubric.md",
+      "score_fields": [
+        {
+          "id": "preliminary_recommendation",
+          "label": "Preliminary recommendation",
+          "scale": "6 Accept; 5 Weak Accept; 4 Borderline Accept; 3 Borderline Reject; 2 Weak Reject; 1 Reject"
+        },
+        {
+          "id": "confidence",
+          "label": "Confidence level",
+          "scale": "5 Expert; 4 High Confidence; 3 Moderate Confidence; 2 Low Confidence; 1 Not Confident"
+        }
+      ],
+      "decision_values": [
+        "6: Accept",
+        "5: Weak Accept",
+        "4: Borderline Accept",
+        "3: Borderline Reject",
+        "2: Weak Reject",
+        "1: Reject"
+      ],
+      "llm_review_generation_allowed": false,
+      "llm_policy_scope": "official_review",
+      "allowed_llm_use_cases": [
+        "internal_mock_review",
+        "manual_worksheet"
+      ],
+      "llm_policy": "ECCV official-review LLM use should be treated as prohibited unless the venue policy is verified otherwise.",
+      "source_note": "Added from user-provided ECCV 2026 general review form text.",
+      "notes": "Use for internal mock reviews or manual official-review worksheets.",
+      "created_at": "",
+      "updated_at": ""
+    },
+    {
+      "id": "cvpr_2026_main",
+      "venue": "CVPR",
+      "year": "2026",
+      "track": "main",
+      "stage": "review",
+      "form_path": "review_forms/venues/cvpr/2026/main/review_form.md",
+      "rubric_path": "review_forms/venues/cvpr/2026/main/rubric.md",
+      "score_fields": [
+        {
+          "id": "soundness",
+          "label": "Soundness",
+          "scale": "4 excellent; 3 good; 2 fair; 1 poor"
+        },
+        {
+          "id": "presentation",
+          "label": "Presentation",
+          "scale": "4 excellent; 3 good; 2 fair; 1 poor"
+        },
+        {
+          "id": "contribution",
+          "label": "Contribution",
+          "scale": "4 excellent; 3 good; 2 fair; 1 poor"
+        },
+        {
+          "id": "rating",
+          "label": "Overall score",
+          "scale": "10 strong accept; 8 accept; 6 marginally above threshold; 5 marginally below threshold; 3 reject; 1 strong reject"
+        },
+        {
+          "id": "confidence",
+          "label": "Confidence",
+          "scale": "5 absolutely certain; 4 confident; 3 fairly confident; 2 willing to defend with uncertainty; 1 unable to assess"
+        }
+      ],
+      "decision_values": [
+        "10: strong accept",
+        "8: accept",
+        "6: marginally above threshold",
+        "5: marginally below threshold",
+        "3: reject",
+        "1: strong reject"
+      ],
+      "llm_review_generation_allowed": null,
+      "llm_policy_scope": "",
+      "allowed_llm_use_cases": [
+        "internal_mock_review",
+        "manual_worksheet"
+      ],
+      "llm_policy": "No CVPR-specific LLM-use policy text was provided in the supplied form. Verify official policy before official-review use.",
+      "source_note": "Added from user-provided text labeled CVPR 2026. The supplied section has OpenReview-style fields and may overlap with ICLR wording.",
+      "notes": "Verify exact venue wording before official use.",
+      "created_at": "",
+      "updated_at": ""
+    },
+    {
+      "id": "iclr_2026_main",
+      "venue": "ICLR",
+      "year": "2026",
+      "track": "main",
+      "stage": "review",
+      "form_path": "review_forms/venues/iclr/2026/main/review_form.md",
+      "rubric_path": "review_forms/venues/iclr/2026/main/rubric.md",
+      "score_fields": [
+        {
+          "id": "soundness",
+          "label": "Soundness",
+          "scale": "4 excellent; 3 good; 2 fair; 1 poor"
+        },
+        {
+          "id": "presentation",
+          "label": "Presentation",
+          "scale": "4 excellent; 3 good; 2 fair; 1 poor"
+        },
+        {
+          "id": "contribution",
+          "label": "Contribution",
+          "scale": "4 excellent; 3 good; 2 fair; 1 poor"
+        },
+        {
+          "id": "rating",
+          "label": "Overall score",
+          "scale": "10 strong accept; 8 accept; 6 marginally above threshold; 5 marginally below threshold; 3 reject; 1 strong reject"
+        },
+        {
+          "id": "confidence",
+          "label": "Confidence",
+          "scale": "5 absolutely certain; 4 confident; 3 fairly confident; 2 willing to defend with uncertainty; 1 unable to assess"
+        }
+      ],
+      "decision_values": [
+        "10: strong accept",
+        "8: accept",
+        "6: marginally above threshold",
+        "5: marginally below threshold",
+        "3: reject",
+        "1: strong reject"
+      ],
+      "llm_review_generation_allowed": null,
+      "llm_policy_scope": "",
+      "allowed_llm_use_cases": [
+        "internal_mock_review",
+        "manual_worksheet"
+      ],
+      "llm_policy": "No ICLR-specific LLM-use policy text was provided in the supplied form. Verify official policy before official-review use.",
+      "source_note": "Added from user-provided OpenReview-style text. The final user text named ICLR 2026 but did not provide a separate form beyond the preceding fields.",
+      "notes": "Replace with exact ICLR 2026 wording if a more specific form is available.",
+      "created_at": "",
+      "updated_at": ""
+    }
+  ]
+}

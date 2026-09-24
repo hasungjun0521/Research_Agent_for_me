@@ -1,0 +1,16 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "schema_version": 1,
+  "last_updated": "",
+  "status_values": [
+    "candidate",
+    "source_found",
+    "porting",
+    "runnable",
+    "reproduced",
+    "failed",
+    "rejected",
+    "deprecated"
+  ],
+  "baselines": []
+}

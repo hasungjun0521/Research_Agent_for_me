@@ -1,0 +1,288 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "status_values": [
+    "idle",
+    "running",
+    "waiting",
+    "blocked",
+    "done"
+  ],
+  "active_status_values": [
+    "running"
+  ],
+  "agents": [
+    {
+      "name": "director",
+      "display_name": "Director",
+      "role": "Workflow orchestration and project-state coordination",
+      "status": "idle",
+      "current_task": "Run director triage after the brief is clarified.",
+      "stage": "planning",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "state/current_state.md",
+        "state/next_actions.md",
+        "state/agent_messages.json",
+        "02_planning/director_plan.md"
+      ],
+      "last_output_files": [
+        "state/current_state.md",
+        "state/next_actions.md",
+        "state/agent_messages.json",
+        "02_planning/director_plan.md",
+        "HANDOFF.md"
+      ],
+      "notes": "Set status to running only while the director is actively coordinating."
+    },
+    {
+      "name": "motivation_planner",
+      "display_name": "Motivation Planner",
+      "role": "Research motivation, problem statement, and contribution planning",
+      "status": "idle",
+      "current_task": "Clarify the research question, motivation, assumptions, constraints, and candidate contribution.",
+      "stage": "motivation",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "00_brief/research_question.md",
+        "00_brief/motivation.md",
+        "00_brief/problem_statement.md",
+        "00_brief/assumptions.md",
+        "00_brief/constraints.md",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "00_brief/motivation.md",
+        "00_brief/problem_statement.md",
+        "00_brief/contribution_candidates.md",
+        "state/current_state.md",
+        "state/next_actions.md",
+        "state/open_questions.md",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "literature_reviewer",
+      "display_name": "Literature Reviewer",
+      "role": "Prior-work review, gap analysis, and baseline discovery",
+      "status": "idle",
+      "current_task": "Review papers and update the related-work matrix.",
+      "stage": "literature",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "01_literature/papers.bib",
+        "01_literature/paper_notes/",
+        "00_brief/contribution_candidates.md",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "01_literature/related_work_matrix.md",
+        "01_literature/gap_analysis.md",
+        "01_literature/prior_limitations.md",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "experiment_designer",
+      "display_name": "Experiment Designer",
+      "role": "Hypotheses, baselines, metrics, ablations, and experiment plans",
+      "status": "idle",
+      "current_task": "Convert claims into testable experiments.",
+      "stage": "experiment design",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "00_brief/contribution_candidates.md",
+        "01_literature/gap_analysis.md",
+        "03_experiments/metrics.md",
+        "03_experiments/data_roots.md",
+        "state/gpu_experiment_queue.json",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "03_experiments/experiment_registry.yaml",
+        "03_experiments/metrics.md",
+        "03_experiments/data_roots.md",
+        "03_experiments/exp_001/hypothesis.md",
+        "03_experiments/exp_001/preregistration.md",
+        "state/gpu_experiment_queue.json",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "data_analyst",
+      "display_name": "Data Analyst",
+      "role": "Experiment result checks, metrics, anomalies, and failure cases",
+      "status": "idle",
+      "current_task": "Analyze run logs and result files.",
+      "stage": "analysis",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "03_experiments/experiment_registry.yaml",
+        "03_experiments/data_roots.md",
+        "03_experiments/exp_001/results/",
+        "03_experiments/exp_001/run_log.md",
+        "03_experiments/exp_001/reproducibility_manifest.json",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "03_experiments/exp_001/analysis.md",
+        "05_results/aggregate_results.md",
+        "05_results/experiment_journal.md",
+        "05_results/experiment_journal.csv",
+        "05_results/failure_cases.md",
+        "05_results/statistical_robustness.md",
+        "05_results/tables/",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "code_agent",
+      "display_name": "Code Agent",
+      "role": "Experiment implementation, debugging, review, and tests",
+      "status": "idle",
+      "current_task": "Implement or debug experiment code.",
+      "stage": "code generation",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "03_experiments/exp_001/config.yaml",
+        "03_experiments/data_roots.md",
+        "03_experiments/exp_001/preregistration.md",
+        "03_experiments/exp_001/reproducibility_manifest.json",
+        "04_code/src/",
+        "04_code/tests/",
+        "state/gpu_experiment_queue.json",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "04_code/src/",
+        "04_code/tests/",
+        "04_code/implementation_notes.md",
+        "03_experiments/exp_001/reproducibility_manifest.json",
+        "05_results/experiment_journal.md",
+        "05_results/experiment_journal.csv",
+        "state/gpu_experiment_queue.json",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "result_interpreter",
+      "display_name": "Result Interpreter",
+      "role": "Claim-evidence interpretation and hypothesis-level conclusions",
+      "status": "idle",
+      "current_task": "Map analyzed results back to hypotheses and claims.",
+      "stage": "interpretation",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "03_experiments/exp_001/analysis.md",
+        "03_experiments/data_roots.md",
+        "05_results/aggregate_results.md",
+        "05_results/experiment_journal.md",
+        "05_results/experiment_journal.csv",
+        "05_results/failure_cases.md",
+        "05_results/statistical_robustness.md",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "05_results/interpretation.md",
+        "05_results/experiment_journal.md",
+        "05_results/experiment_journal.csv",
+        "05_results/claim_evidence_board.md",
+        "00_brief/contribution_candidates.md",
+        "state/agent_messages.json",
+        "state/open_questions.md"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "writing_agent",
+      "display_name": "Writing Agent",
+      "role": "Academic drafting, section revision, and claim discipline",
+      "status": "idle",
+      "current_task": "Draft or revise paper sections using current evidence.",
+      "stage": "writing",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "00_brief/",
+        "01_literature/",
+        "05_results/interpretation.md",
+        "05_results/experiment_journal.md",
+        "05_results/experiment_journal.csv",
+        "05_results/statistical_robustness.md",
+        "06_writing/terminology.md",
+        "06_writing/",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "06_writing/draft.md",
+        "06_writing/abstract.md",
+        "06_writing/limitations.md",
+        "06_writing/terminology.md",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "venue_reviewer",
+      "display_name": "Venue Reviewer",
+      "role": "Venue/year review-form critique and score simulation",
+      "status": "idle",
+      "current_task": "Review the draft using a selected venue/year form.",
+      "stage": "venue review",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "review_forms/form_registry.json",
+        "07_reviews/venue_review_plan.md",
+        "07_reviews/reviewer_attack_matrix.md",
+        "06_writing/draft.md",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "07_reviews/form_reviews/",
+        "07_reviews/revision_plan.md",
+        "07_reviews/reviewer_attack_matrix.md",
+        "state/agent_messages.json",
+        "state/open_questions.md"
+      ],
+      "notes": ""
+    },
+    {
+      "name": "critic",
+      "display_name": "Critic",
+      "role": "Reviewer-style critique, attack surface, and revision priorities",
+      "status": "idle",
+      "current_task": "Review the draft for validity, novelty, baseline, and clarity risks.",
+      "stage": "critique",
+      "started_at": "",
+      "updated_at": "",
+      "last_input_files": [
+        "06_writing/draft.md",
+        "00_brief/contribution_candidates.md",
+        "05_results/interpretation.md",
+        "05_results/statistical_robustness.md",
+        "state/agent_messages.json"
+      ],
+      "last_output_files": [
+        "07_reviews/critic_comments.md",
+        "07_reviews/reviewer_attack_surface.md",
+        "07_reviews/reviewer_attack_matrix.md",
+        "07_reviews/revision_plan.md",
+        "state/agent_messages.json"
+      ],
+      "notes": ""
+    }
+  ]
+}

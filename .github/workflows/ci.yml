@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  portable-setup:
+    name: Setup (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.12"]
+
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install from editable checkout
+        run: python -m pip install --no-deps --editable .
+
+      - name: Install portable test tools
+        run: python -m pip install --quiet pytest
+
+      - name: Preview automation setup
+        run: python -m scripts.commands.release.automation_setup --dry-run
+
+      - name: Validate public workspace profile
+        run: python -m scripts.commands.release.workspace_profile validate
+
+      - name: Test setup, runners, readiness, and state locks
+        run: >-
+          python -m pytest
+          scripts/tests/test_automation_setup.py
+          scripts/tests/test_agent_runner.py
+          scripts/tests/test_orchestrator_readiness.py
+          scripts/tests/test_state_io.py
+          scripts/tests/test_research_autopilot.py
+          scripts/tests/test_runner_commands.py
+          -q
+
+      - name: Check preview leaves tracked files unchanged
+        run: git diff --exit-code
+
+  verify-harness:
+    name: Verify Harness
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Install lint and test tools
+        run: python -m pip install --quiet ruff pytest
+
+      - name: Compile Python scripts
+        run: python -m py_compile $(find scripts -name '*.py' | sort)
+
+      - name: Lint Python scripts
+        run: python -m ruff check scripts
+
+      - name: Run harness unit tests
+        run: python -m pytest scripts/tests -q
+
+      - name: Check project index
+        run: python -m scripts.commands.projects.project_index check
+
+      - name: Check dashboard JavaScript
+        run: |
+          node --check dashboard/core.js
+          node --check dashboard/app.js
+
+      - name: Check generated report index
+        run: python -m scripts.commands.reports.report_index refresh --project template --dry-run
+
+      - name: Verify template project
+        run: python -m scripts.commands.release.verify_harness --project template --skip-paper-build

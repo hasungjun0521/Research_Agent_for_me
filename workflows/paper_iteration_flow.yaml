@@ -1,0 +1,147 @@
+name: paper_iteration_flow
+description: "Iteration loop for improving a paper draft while preserving claim-evidence alignment."
+progress_capture:
+  command: "python -m scripts.commands.review.progress_checkpoint record"
+  when: "Record a checkpoint during any writing/review step when a claim status changes, a blocker appears, a direction changes, a memory note is needed, or the next action changes before the final response."
+  writing_outputs:
+    - 06_writing/terminology.md
+    - 05_results/interpretation.md
+    - state/open_questions.md
+steps:
+  - id: writing
+    agent: writing_agent
+    description: "Revise target sections using current evidence and prior critique."
+    input_files:
+      - 06_writing/draft.md
+      - 06_writing/terminology.md
+      - 05_results/interpretation.md
+      - 05_results/claim_graph.md
+      - 07_reviews/revision_plan.md
+    output_files:
+      - 06_writing/draft.md
+      - 06_writing/terminology.md
+      - 06_writing/limitations.md
+      - state/open_questions.md
+    success_criteria:
+      - "Revision addresses assigned issues."
+      - "Unsupported claims are removed, softened, or marked."
+
+  - id: critic
+    agent: critic
+    description: "Review revised draft for remaining rejection risks."
+    input_files:
+      - 06_writing/draft.md
+      - 00_brief/contribution_candidates.md
+      - 01_literature/gap_analysis.md
+      - 05_results/interpretation.md
+      - 05_results/claim_graph.md
+    output_files:
+      - 07_reviews/agent_quality_audit.md
+      - 07_reviews/critic_comments.md
+      - 07_reviews/reviewer_attack_surface.md
+    success_criteria:
+      - "Feedback is specific and prioritized."
+      - "Claim-evidence problems are identified."
+
+  - id: venue_review
+    agent: venue_reviewer
+    description: "Apply the target venue/year review form to the revised draft."
+    input_files:
+      - review_forms/form_registry.json
+      - 07_reviews/venue_review_plan.md
+      - 06_writing/draft.md
+      - 05_results/interpretation.md
+    output_files:
+      - 07_reviews/form_reviews/
+      - 07_reviews/revision_plan.md
+      - state/open_questions.md
+    success_criteria:
+      - "The selected form is named by form id, venue, year, and track."
+      - "All required form fields and scores are completed with evidence."
+
+  - id: director
+    agent: director
+    description: "Prioritize critique and assign next revision work."
+    input_files:
+      - state/project_health.md
+      - state/state_doctor.md
+      - 07_reviews/critic_comments.md
+      - 07_reviews/reviewer_attack_surface.md
+      - state/current_state.md
+    output_files:
+      - 07_reviews/revision_plan.md
+      - state/project_health.md
+      - state/current_state.md
+      - state/next_actions.md
+    success_criteria:
+      - "Revision priorities are clear."
+      - "Next owner agent and required inputs are named."
+
+  - id: revision
+    agent: writing_agent
+    description: "Apply director-approved revisions to the target draft sections."
+    input_files:
+      - 07_reviews/revision_plan.md
+      - 06_writing/
+      - 06_writing/terminology.md
+      - 05_results/
+    output_files:
+      - 06_writing/draft.md
+      - 06_writing/terminology.md
+      - 06_writing/abstract.md
+      - 06_writing/introduction.md
+      - 06_writing/discussion.md
+    success_criteria:
+      - "Critical revision items are resolved or explicitly deferred."
+      - "Draft remains consistent across sections."
+
+  - id: result_interpreter
+    agent: result_interpreter
+    description: "Re-check whether revised claims match the current evidence."
+    input_files:
+      - 06_writing/draft.md
+      - 05_results/aggregate_results.md
+      - 05_results/experiment_journal.md
+      - 05_results/interpretation.md
+      - 05_results/claim_graph.md
+    output_files:
+      - 05_results/interpretation.md
+      - 05_results/claim_graph.md
+      - 05_results/claim_graph.json
+      - 05_results/experiment_journal.md
+      - state/open_questions.md
+    success_criteria:
+      - "Draft claims are categorized as supported, weak, unsupported, or untested."
+      - "Needed evidence is recorded."
+      - "The working claim graph is current before final writing/export decisions."
+
+  - id: writing_final_pass
+    agent: writing_agent
+    description: "Perform a final coherence pass after interpretation updates."
+    input_files:
+      - 05_results/interpretation.md
+      - 07_reviews/revision_plan.md
+      - 06_writing/draft.md
+      - 06_writing/terminology.md
+    output_files:
+      - 06_writing/draft.md
+      - 06_writing/terminology.md
+    success_criteria:
+      - "Final draft reflects current evidence and limitations."
+      - "No stale claims remain from earlier iterations."
+
+  - id: report_export
+    agent: writing_agent
+    description: "Export stable reader-facing paper and claim evidence from the working draft."
+    input_files:
+      - 06_writing/draft.md
+      - 06_writing/terminology.md
+      - 05_results/interpretation.md
+      - 05_results/claim_evidence_board.md
+      - 05_results/claim_graph.md
+    output_files:
+      - 09_report/paper/main.tex
+      - 09_report/results/claim_evidence.csv
+    success_criteria:
+      - "Reader-facing paper text matches the working draft's supported claims."
+      - "Final claim rows include only stable evidence-backed claims."

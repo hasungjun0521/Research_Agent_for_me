@@ -1,0 +1,101 @@
+name: experiment_debug_flow
+description: "Loop for debugging failed, incomplete, or suspicious experiments."
+progress_capture:
+  command: "python -m scripts.commands.review.progress_checkpoint record"
+  when: "Record a checkpoint during any debug step when a suspected cause, blocker, failed assumption, fix direction, rerun outcome, or next-action change appears before the final response."
+  experiment_outputs:
+    - 03_experiments/<exp_id>/analysis.md
+    - 05_results/experiment_journal.md
+    - 05_results/experiment_journal.csv
+steps:
+  - id: data_analyst
+    agent: data_analyst
+    description: "Identify what is suspicious or broken in the current results."
+    input_files:
+      - 03_experiments/experiment_dag.json
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/metrics.md
+      - 03_experiments/exp_001/run_log.md
+      - 03_experiments/exp_001/results/
+    output_files:
+      - 03_experiments/exp_001/analysis.md
+      - 05_results/experiment_journal.md
+      - 05_results/experiment_journal.csv
+      - 05_results/failure_cases.md
+      - state/open_questions.md
+    success_criteria:
+      - "Failure mode is described with evidence from logs or metrics."
+      - "Data quality issues are separated from research interpretation."
+
+  - id: code_agent
+    agent: code_agent
+    description: "Debug implementation, configuration, or execution issues."
+    input_files:
+      - 03_experiments/exp_001/config.yaml
+      - 03_experiments/exp_001/run_log.md
+      - 04_code/
+      - 03_experiments/exp_001/analysis.md
+    output_files:
+      - 04_code/src/
+      - 04_code/tests/
+      - 04_code/implementation_notes.md
+      - 03_experiments/exp_001/run_log.md
+    success_criteria:
+      - "Bug or uncertainty is isolated."
+      - "Run and test instructions are documented."
+
+  - id: experiment_designer
+    agent: experiment_designer
+    description: "Revise the experiment design if the failure reflects a design flaw."
+    input_files:
+      - 03_experiments/exp_001/analysis.md
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/metrics.md
+      - 05_results/failure_cases.md
+    output_files:
+      - 02_planning/experiment_plan.md
+      - 03_experiments/experiment_dag.json
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/exp_001/config.yaml
+      - 03_experiments/metrics.md
+    success_criteria:
+      - "Design changes address the identified failure mode."
+      - "Hypothesis, metric, and baseline remain aligned."
+      - "A revised smoke-first DAG states whether reruns can execute in parallel."
+
+  - id: director
+    agent: director
+    description: "Decide whether to rerun, redesign, narrow the claim, or stop."
+    input_files:
+      - state/project_health.md
+      - state/state_doctor.md
+      - 03_experiments/exp_001/analysis.md
+      - 04_code/implementation_notes.md
+      - 03_experiments/experiment_registry.yaml
+      - state/current_state.md
+    output_files:
+      - state/project_health.md
+      - state/state_doctor.md
+      - state/current_state.md
+      - state/next_actions.md
+      - 02_planning/decision_log.md
+    success_criteria:
+      - "Next action is justified by evidence."
+      - "Research claim impact is recorded."
+
+  - id: data_analyst_rerun
+    agent: data_analyst
+    description: "Analyze rerun results after debugging or redesign."
+    input_files:
+      - 03_experiments/experiment_registry.yaml
+      - 03_experiments/exp_001/run_log.md
+      - 03_experiments/exp_001/results/
+    output_files:
+      - 03_experiments/exp_001/analysis.md
+      - 05_results/aggregate_results.md
+      - 05_results/experiment_journal.md
+      - 05_results/experiment_journal.csv
+      - 05_results/failure_cases.md
+    success_criteria:
+      - "Rerun is compared against the prior failed or suspicious run."
+      - "Remaining anomalies are documented."

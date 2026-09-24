@@ -1,0 +1,83 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "status_values": [
+    "blocked",
+    "deferred",
+    "done",
+    "in progress",
+    "open"
+  ],
+  "priority_values": [
+    "high",
+    "medium",
+    "low"
+  ],
+  "commands": [
+    {
+      "id": "cmd_001",
+      "action": "Clarify the research question, motivation, assumptions, constraints, and candidate contribution from the user's idea.",
+      "owner_agent": "motivation_planner",
+      "priority": "high",
+      "status": "open",
+      "required_inputs": [
+        "User-provided research idea",
+        "00_brief/research_question.md",
+        "00_brief/motivation.md"
+      ],
+      "expected_outputs": [
+        "00_brief/research_question.md",
+        "00_brief/motivation.md",
+        "00_brief/problem_statement.md",
+        "00_brief/assumptions.md",
+        "00_brief/constraints.md",
+        "00_brief/contribution_candidates.md",
+        "state/current_state.md",
+        "state/agent_memory.md",
+        "state/next_actions.md",
+        "state/open_questions.md"
+      ],
+      "depends_on": [],
+      "parallel_group": "initial_research_setup",
+      "display_summary": "Turn the user's initial idea into a concrete research brief.",
+      "why_now": "The first loop needs a specific problem before literature, experiments, or writing can be meaningful.",
+      "done_when": "The brief states the research question, motivation, assumptions, constraints, candidate contribution, and missing information in project files.",
+      "created_at": "YYYY-MM-DDTHH:MM:SS+09:00",
+      "updated_at": "YYYY-MM-DDTHH:MM:SS+09:00",
+      "notes": "The agent should use harness CLIs for structured state and save progress during the pass."
+    },
+    {
+      "id": "cmd_002",
+      "action": "Run director triage after the brief is clarified and choose the next research step.",
+      "owner_agent": "director",
+      "priority": "high",
+      "status": "open",
+      "required_inputs": [
+        "00_brief/",
+        "state/current_state.md",
+        "state/agent_memory.md",
+        "state/next_actions.md",
+        "state/open_questions.md",
+        "state/command_queue.json"
+      ],
+      "expected_outputs": [
+        "02_planning/director_plan.md",
+        "02_planning/decision_log.md",
+        "state/current_state.md",
+        "state/next_actions.md",
+        "state/command_queue.json",
+        "HANDOFF.md"
+      ],
+      "depends_on": [
+        "cmd_001"
+      ],
+      "parallel_group": "initial_research_setup",
+      "display_summary": "Choose the next research step after the brief is concrete.",
+      "why_now": "The director keeps the workflow coherent before literature, baseline, experiment, or writing work starts.",
+      "done_when": "The plan, next actions, command queue, and HANDOFF name the next owner, purpose, and completion condition in plain language.",
+      "created_at": "YYYY-MM-DDTHH:MM:SS+09:00",
+      "updated_at": "YYYY-MM-DDTHH:MM:SS+09:00",
+      "notes": "Use file-based state, command queue, status, messages, and HANDOFF files as the default continuation workflow."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+experiments:
+  - exp_id: exp_001
+    status: planned
+    hypothesis: "The minimum viable experiment will test the first concrete claim once defined."
+    dataset: "to_be_defined"
+    method: "to_be_defined"
+    baseline: "to_be_defined"
+    metrics:
+      - primary_metric_to_be_defined
+    config_path: 03_experiments/exp_001/config.yaml
+    result_path: 03_experiments/exp_001/results/
+    analysis_path: 03_experiments/exp_001/analysis.md
+    notes: "Replace this starter entry after experiment design."
+

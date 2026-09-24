@@ -1,0 +1,30 @@
+experiment:
+  exp_id: exp_001
+  status: planned
+  seed: 0
+
+data:
+  dataset: to_be_defined
+  split: to_be_defined
+  preprocessing: to_be_defined
+
+method:
+  name: to_be_defined
+  parameters: {}
+
+baseline:
+  name: to_be_defined
+  parameters: {}
+
+metrics:
+  primary:
+    - primary_metric_to_be_defined
+  secondary: []
+  diagnostic: []
+
+outputs:
+  result_dir: 03_experiments/exp_001/results
+  log_file: 03_experiments/exp_001/run_log.md
+
+notes: "Update this config before running the experiment."
+

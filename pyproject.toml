@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-agent-workspace"
+version = "8.0.0"
+description = "File-system workspace for agent-driven research workflows."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+# Weekly dev deck rendering (scripts.commands.reports.weekly_deck). Kept optional
+# so the core harness stays dependency-free.
+deck = ["python-pptx>=1.0", "matplotlib>=3.7"]
+
+[tool.setuptools.packages.find]
+include = ["scripts*"]
+
+# Install editable from a checkout: runtime templates, prompts, and configuration
+# remain in the repository and are not bundled into a standalone wheel.
+
+[tool.research-agent.commands]
+compile = "python -m compileall -q scripts"
+workflow_audit = "python -m scripts.commands.release.workflow_audit"
+smoke = "python -m scripts.commands.release.smoke_test"
+dashboard_check = "node --check dashboard/core.js && node --check dashboard/app.js"
+project_index_check = "python -m scripts.commands.projects.project_index check"
+template_validate = "python -m scripts.commands.projects.validate_project --project template --strict"
+verify_harness = "python -m scripts.commands.release.verify_harness --project template --skip-paper-build"
+release_check = "python -m scripts.commands.release.release_check --project template --version v8.0.0 --skip-paper-build --strict-template-state"
+
+[tool.pytest.ini_options]
+# Canonical unit-test home; keeps bare `pytest` aligned with the CI step
+# (`python -m pytest scripts/tests -q`). Do not place tests beside commands.
+testpaths = ["scripts/tests"]
+python_files = ["test_*.py", "*_test.py"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+extend-exclude = [
+  "projects",
+  "tmp",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+# E501: long human-readable CLI/help/message strings are intentional here;
+# enforcing a hard wrap would churn ~1.5k lines without correctness benefit.
+ignore = ["E501"]

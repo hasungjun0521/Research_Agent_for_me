@@ -1,0 +1,16 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "schema_version": 1,
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "status_values": [
+    "blocked",
+    "cancelled",
+    "complete",
+    "idle",
+    "max_iterations",
+    "running",
+    "timeout"
+  ],
+  "active_run_id": "",
+  "runs": []
+}

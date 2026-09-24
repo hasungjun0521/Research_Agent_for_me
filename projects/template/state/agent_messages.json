@@ -1,0 +1,27 @@
+{
+  "project": "{{PROJECT_NAME}}",
+  "schema_version": 1,
+  "last_updated": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "status_values": [
+    "acknowledged",
+    "blocked",
+    "cancelled",
+    "open",
+    "resolved"
+  ],
+  "priority_values": [
+    "high",
+    "medium",
+    "low"
+  ],
+  "kind_values": [
+    "blocker",
+    "decision",
+    "handoff",
+    "info",
+    "question",
+    "request",
+    "review"
+  ],
+  "messages": []
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "display": {
+    "summary_language": "en",
+    "top_summary_labels": {
+      "work": "What happened this instruction",
+      "result": "Result analysis",
+      "next": "Next action"
+    }
+  },
+  "agent_output": {
+    "preferred_language": "en",
+    "plain_language_first": true
+  },
+  "agent_limits": {
+    "enabled": false,
+    "status_command": [],
+    "timeout_seconds": 10,
+    "handoff_threshold_percent": 5.0,
+    "json_paths": {
+      "five_hour_remaining_pct": "",
+      "weekly_remaining_pct": ""
+    }
+  },
+  "agent_runners": {
+    "default_profile": "",
+    "profiles": {
+      "codex": {
+        "description": "Example local Codex runner profile. Put the real command in workspace_profile.local.json.",
+        "command": []
+      },
+      "claude": {
+        "description": "Example local Claude runner profile. Put the real command in workspace_profile.local.json.",
+        "command": []
+      }
+    }
+  },
+  "gpu": {
+    "enabled": false,
+    "scheduler": "slurm",
+    "max_user_gpus": 1,
+    "default_gpu_type": "auto",
+    "auto_order": [
+      "a100",
+      "a6000",
+      "a5000",
+      "a4000"
+    ],
+    "profiles": {
+      "a100": {
+        "partition": "a100",
+        "node": "node01",
+        "mem": "80G",
+        "cpus": 8
+      },
+      "a4000": {
+        "partition": "a4000",
+        "node": "node05",
+        "mem": "16G",
+        "cpus": 8
+      },
+      "a5000": {
+        "partition": "a5000",
+        "node": "node04",
+        "mem": "16G",
+        "cpus": 8
+      },
+      "a6000": {
+        "partition": "a6000",
+        "node": "node06",
+        "mem": "16G",
+        "cpus": 8
+      }
+    },
+    "commands": {
+      "queue_status": [
+        "squeue",
+        "--me",
+        "-h",
+        "-o",
+        "%i|%j|%T|%b|%D|%R"
+      ],
+      "node_status": [
+        "scontrol",
+        "show",
+        "node",
+        "{node}",
+        "-o"
+      ],
+      "launcher": "sbatch"
+    }
+  }
+}
